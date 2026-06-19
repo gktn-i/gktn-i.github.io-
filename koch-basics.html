@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Die Basics der Küche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1a0f0a;
+    --bg-warm: #241510;
+    --paper: #f4ead8;
+    --paper-dim: #e8dcc4;
+    --ink: #1a0f0a;
+    --accent: #b8341e;
+    --accent-glow: #d94824;
+    --gold: #c9a25f;
+    --muted: #6b4a3a;
+    --line: rgba(201, 162, 95, 0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--paper);
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 400;
+    line-height: 1.6;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(184, 52, 30, 0.12) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(201, 162, 95, 0.08) 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  .container {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 40px 0 48px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    height: 1px;
+    width: 40px;
+    background: var(--gold);
+    opacity: 0.5;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: clamp(44px, 8vw, 80px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--paper);
+    margin-bottom: 16px;
+  }
+
+  h1 .accent {
+    color: var(--accent-glow);
+    font-style: italic;
+    font-weight: 600;
+  }
+
+  .subtitle {
+    font-size: 17px;
+    color: var(--paper-dim);
+    font-style: italic;
+    font-weight: 300;
+    opacity: 0.75;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 44px;
+  }
+
+  .tab {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--paper-dim);
+    padding: 16px 16px;
+    font-family: 'Fraunces', serif;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .tab:hover {
+    border-color: var(--gold);
+    color: var(--paper);
+  }
+
+  .tab:focus-visible {
+    outline: 2px solid var(--accent-glow);
+    outline-offset: 2px;
+  }
+
+  .tab.active {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper);
+  }
+
+  .tab-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .tab-title {
+    font-size: 19px;
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.15;
+    margin-bottom: 4px;
+  }
+
+  .tab-desc {
+    font-size: 12px;
+    opacity: 0.7;
+    font-style: normal;
+    line-height: 1.3;
+  }
+
+  /* Panels */
+  .panel { display: none; animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+  .panel.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 18px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .section-label + .section-label,
+  .def-grid + .section-label,
+  .ref-table + .section-label,
+  .ratio-grid + .section-label,
+  .glossary + .section-label {
+    margin-top: 44px;
+  }
+
+  /* Definition / rule cards */
+  .def-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .def-card {
+    background: rgba(244, 234, 216, 0.04);
+    border: 1px solid var(--line);
+    padding: 22px 22px 20px;
+    position: relative;
+  }
+
+  .def-card h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 21px;
+    color: var(--paper);
+    margin-bottom: 9px;
+    letter-spacing: -0.01em;
+  }
+
+  .def-card p {
+    font-size: 15px;
+    color: var(--paper-dim);
+    line-height: 1.6;
+  }
+
+  .def-card .tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.85;
+  }
+
+  .def-card .formula {
+    display: inline-block;
+    margin-bottom: 12px;
+    background: rgba(184, 52, 30, 0.15);
+    color: var(--accent-glow);
+    padding: 3px 11px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Rule cards carry a small accent marker instead of a number */
+  .rule-card::before {
+    content: '';
+    position: absolute;
+    top: 22px;
+    left: 0;
+    width: 3px;
+    height: 20px;
+    background: var(--accent);
+  }
+  .rule-card { padding-left: 26px; }
+
+  /* Glossary */
+  .glossary {
+    border: 1px solid var(--line);
+    background: rgba(244, 234, 216, 0.04);
+  }
+
+  .gloss-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 20px;
+    padding: 18px 26px;
+    border-bottom: 1px dashed rgba(201, 162, 95, 0.18);
+    align-items: baseline;
+  }
+
+  .gloss-item:last-child { border-bottom: none; }
+
+  .gloss-term {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent-glow);
+    line-height: 1.25;
+  }
+
+  .gloss-def {
+    font-size: 15px;
+    color: var(--paper-dim);
+    line-height: 1.6;
+  }
+
+  /* Ratio grid (reuses the temp-card aesthetic) */
+  .ratio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+  }
+
+  .ratio-item {
+    text-align: center;
+    padding: 22px 14px;
+    background: linear-gradient(135deg, rgba(184, 52, 30, 0.08), rgba(201, 162, 95, 0.04));
+    border: 1px solid var(--line);
+  }
+
+  .ratio-item .r-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .ratio-item .r-value {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 30px;
+    color: var(--paper);
+    line-height: 1;
+  }
+
+  .ratio-item .r-sub {
+    font-size: 12px;
+    color: var(--paper-dim);
+    opacity: 0.75;
+    margin-top: 9px;
+    font-style: italic;
+  }
+
+  /* Reference table */
+  .ref-table {
+    border: 1px solid var(--line);
+    background: rgba(244, 234, 216, 0.04);
+  }
+
+  .ref-row {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 20px;
+    padding: 15px 26px;
+    border-bottom: 1px dashed rgba(201, 162, 95, 0.18);
+    align-items: baseline;
+  }
+
+  .ref-row:last-child { border-bottom: none; }
+
+  .ref-key {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--paper);
+  }
+
+  .ref-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--paper-dim);
+    line-height: 1.5;
+  }
+
+  .ref-val .hot { color: var(--accent-glow); }
+
+  /* Note box */
+  .note {
+    background: rgba(184, 52, 30, 0.07);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 18px 22px;
+    margin-top: 28px;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--paper-dim);
+    line-height: 1.6;
+  }
+
+  /* Pull quote */
+  .pull-quote {
+    text-align: center;
+    padding: 44px 24px;
+    margin: 44px 0 8px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .pull-quote .mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 80px;
+    line-height: 0.5;
+    color: var(--accent-glow);
+    opacity: 0.4;
+    margin-bottom: 16px;
+  }
+
+  .pull-quote p {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 21px;
+    line-height: 1.4;
+    color: var(--paper);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  @media (max-width: 720px) {
+    .tabs { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .tabs { grid-template-columns: 1fr; }
+    .def-grid { grid-template-columns: 1fr; }
+    .gloss-item { grid-template-columns: 1fr; gap: 6px; padding: 16px 20px; }
+    .ref-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 20px; }
+    .ref-val { font-size: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel { animation: none; }
+    .tab { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="header">
+      <div class="eyebrow">Immer griffbereit</div>
+      <h1>Die <span class="accent">Basics</span><br>der Küche</h1>
+      <p class="subtitle">Techniken, Faustregeln, Saucen und Maße zum schnellen Nachschlagen.</p>
+    </header>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-panel="technik" role="tab">
+        <span class="tab-num">01</span>
+        <span class="tab-title">Techniken</span>
+        <span class="tab-desc">Garmethoden erklärt</span>
+      </button>
+      <button class="tab" data-panel="regeln" role="tab">
+        <span class="tab-num">02</span>
+        <span class="tab-title">Faustregeln</span>
+        <span class="tab-desc">Die wichtigsten Regeln</span>
+      </button>
+      <button class="tab" data-panel="saucen" role="tab">
+        <span class="tab-num">03</span>
+        <span class="tab-title">Saucen</span>
+        <span class="tab-desc">Grundsaucen und Basen</span>
+      </button>
+      <button class="tab" data-panel="masse" role="tab">
+        <span class="tab-num">04</span>
+        <span class="tab-title">Maße &amp; Mengen</span>
+        <span class="tab-desc">Verhältnisse und Umrechnung</span>
+      </button>
+      <button class="tab" data-panel="begriffe" role="tab">
+        <span class="tab-num">05</span>
+        <span class="tab-title">Begriffe</span>
+        <span class="tab-desc">Küchen-Vokabular</span>
+      </button>
+      <button class="tab" data-panel="temperatur" role="tab">
+        <span class="tab-num">06</span>
+        <span class="tab-title">Temperaturen</span>
+        <span class="tab-desc">Kerntemp. und Rauchpunkte</span>
+      </button>
+    </div>
+
+    <!-- 01 TECHNIKEN -->
+    <section class="panel active" id="technik">
+      <div class="section-label">Die wichtigsten Garmethoden</div>
+      <div class="def-grid">
+
+        <div class="def-card">
+          <h3>Scharf anbraten</h3>
+          <p>Bei sehr hoher Hitze schnell eine braune Kruste bilden. Die Maillard-Reaktion liefert die Röstaromen. Wenig bewegen und erst wenden, wenn sich das Stück von selbst löst.</p>
+          <span class="tag">Steak · Filets · Fleischstücke</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Sautieren</h3>
+          <p>In wenig heißem Fett bei hoher Hitze garen, dabei ständig in Bewegung. Funktioniert nur mit kleinen, gleich großen Stücken.</p>
+          <span class="tag">Gemüse · Streifen · Pilze</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Schmoren</h3>
+          <p>Erst scharf anbraten, dann mit wenig Flüssigkeit zugedeckt lange bei niedriger Hitze garen. Macht zähe Stücke butterzart.</p>
+          <span class="tag">Gulasch · Braten · Ochsenbacke</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Dünsten</h3>
+          <p>Im eigenen Saft oder wenig Fett und Flüssigkeit bei niedriger Hitze geschlossen garen. Schonend und aromaschonend.</p>
+          <span class="tag">Gemüse · Fisch · Zwiebeln</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Dämpfen</h3>
+          <p>Über kochendem Wasser nur im Dampf garen, ohne Kontakt zur Flüssigkeit. Sehr schonend, hält Nährstoffe und Farbe.</p>
+          <span class="tag">Gemüse · Fisch · Klöße</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Kochen / Sieden</h3>
+          <p>In sprudelnd kochendem Wasser bei 100 °C. Große, kräftige Bewegung im Topf.</p>
+          <span class="tag">Pasta · Kartoffeln · Eier</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Köcheln / Simmern</h3>
+          <p>Knapp unter dem Siedepunkt, es steigen nur kleine Bläschen auf. Schonender als volles Kochen.</p>
+          <span class="tag">Saucen · Suppen · Fonds</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Pochieren</h3>
+          <p>In Flüssigkeit knapp unter dem Kochpunkt, etwa 70 bis 85 °C, sanft garen. Die Oberfläche bleibt fast ruhig.</p>
+          <span class="tag">Eier · Fisch · Geflügel</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Blanchieren</h3>
+          <p>Sehr kurz in kochendes Wasser, dann sofort in Eiswasser abschrecken. Erhält Farbe und Biss, erleichtert das Schälen.</p>
+          <span class="tag">Grünes Gemüse · Tomaten · Mandeln</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Frittieren</h3>
+          <p>In viel heißem Fett, etwa 160 bis 180 °C, schwimmend garen. Gibt eine rundum knusprige Kruste.</p>
+          <span class="tag">Pommes · Schnitzel · Teigwaren</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Braten im Ofen</h3>
+          <p>Mit trockener Hitze rundum garen. Größere Stücke werden außen braun und innen gleichmäßig gar.</p>
+          <span class="tag">Braten · Geflügel · Wurzelgemüse</span>
+        </div>
+
+        <div class="def-card">
+          <h3>Grillen</h3>
+          <p>Direkte Strahlungshitze von unten oder oben. Schnelle Bräunung und typisches Grillaroma.</p>
+          <span class="tag">Steak · Gemüse · Würste</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 02 FAUSTREGELN -->
+    <section class="panel" id="regeln">
+      <div class="section-label">Was fast immer gilt</div>
+      <div class="def-grid">
+
+        <div class="def-card rule-card">
+          <h3>Pfanne richtig vorheizen</h3>
+          <p>Edelstahl leer vorheizen und den Wassertropfen-Test machen. Tanzt der Tropfen als Perle (Leidenfrost), erst dann das Öl rein. So klebt nichts.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Fleisch trocken tupfen</h3>
+          <p>Feuchtigkeit verhindert Bräunung. Nur eine trockene Oberfläche gibt eine Kruste statt Dampf.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Pfanne nicht überladen</h3>
+          <p>Zu viel auf einmal kühlt die Pfanne und alles dünstet statt zu braten. Lieber in mehreren Portionen.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Ruhen lassen</h3>
+          <p>Nach dem Braten 5 bis 10 Min ruhen lassen, damit sich der Saft verteilt und beim Anschneiden nicht ausläuft.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Gegen die Faser schneiden</h3>
+          <p>Quer zur Muskelfaser schneiden macht das Fleisch zarter und leichter zu kauen.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Öl zum Garpunkt wählen</h3>
+          <p>Hohe Hitze braucht hohen Rauchpunkt (neutrales Öl, Butterschmalz). Natives Olivenöl nur für niedrige Hitze und zum Finishen.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Salzen mit Timing</h3>
+          <p>Salz zieht Wasser. Entweder weit vorher (trocken, über Nacht) oder direkt vor dem Braten. Die Zone dazwischen macht die Oberfläche nass.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Am Ende abschmecken</h3>
+          <p>Salz, Säure (Zitrone, Essig) und Frische zum Schluss. Säure hebt den Geschmack ähnlich wie Salz.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Frische Kräuter spät</h3>
+          <p>Getrocknete Kräuter brauchen Zeit und Hitze, frische gibst du erst zum Schluss dazu, sonst verlieren sie Aroma.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Anbraten versiegelt nichts</h3>
+          <p>Der Saft bleibt nicht durch die Kruste drin, das ist ein Mythos. Es geht allein um Röstaromen.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Kerntemperatur schlägt Zeit</h3>
+          <p>Ein Thermometer ist zuverlässiger als jede Minutenangabe. Garstufe immer über die Kerntemperatur steuern.</p>
+        </div>
+
+        <div class="def-card rule-card">
+          <h3>Carryover einplanen</h3>
+          <p>Fleisch gart nach dem Herausnehmen durch die Resthitze noch nach. Darum etwas früher rausnehmen.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 03 SAUCEN -->
+    <section class="panel" id="saucen">
+      <div class="section-label">Basen für den Alltag</div>
+      <div class="def-grid">
+
+        <div class="def-card">
+          <span class="formula">1 : 1 · Butter : Mehl</span>
+          <h3>Mehlschwitze (Roux)</h3>
+          <p>Gleiche Teile Butter und Mehl bei mittlerer Hitze verrühren, dann mit Flüssigkeit aufgießen. Bindet Saucen und Suppen.</p>
+        </div>
+
+        <div class="def-card">
+          <span class="formula">3 : 1 · Öl : Säure</span>
+          <h3>Vinaigrette</h3>
+          <p>Drei Teile Öl, ein Teil Säure, etwas Senf, Salz und Pfeffer. Der Senf hilft beim Emulgieren.</p>
+        </div>
+
+        <div class="def-card">
+          <h3>Pfannensauce</h3>
+          <p>Den Bratensatz mit Wein oder Brühe ablöschen, reduzieren und mit kalter Butter montieren. Aus dem, was nach dem Braten in der Pfanne bleibt.</p>
+        </div>
+
+        <div class="def-card">
+          <h3>Mayonnaise</h3>
+          <p>Eigelb mit Senf und etwas Säure verrühren, dann das Öl langsam einrühren bis es emulgiert. Basis für Aioli und Remoulade.</p>
+        </div>
+
+      </div>
+
+      <div class="section-label">Die fünf Muttersaucen</div>
+      <div class="def-grid">
+
+        <div class="def-card">
+          <h3>Béchamel</h3>
+          <p>Helle Mehlschwitze plus Milch. Basis für Käsesauce (Mornay) und Lasagne.</p>
+        </div>
+
+        <div class="def-card">
+          <h3>Velouté</h3>
+          <p>Helle Mehlschwitze plus heller Fond von Huhn, Fisch oder Kalb.</p>
+        </div>
+
+        <div class="def-card">
+          <h3>Espagnole</h3>
+          <p>Braune Mehlschwitze plus brauner Fond und Tomate. Basis für Demi-Glace und Bratensaucen.</p>
+        </div>
+
+        <div class="def-card">
+          <h3>Sauce Tomate</h3>
+          <p>Tomaten mit Gemüse und Aromaten eingekocht. Basis für viele Tomatensaucen.</p>
+        </div>
+
+        <div class="def-card">
+          <h3>Hollandaise</h3>
+          <p>Eigelb mit warmer Butter emulgiert plus Zitrone oder Essig. Nicht zu heiß, sonst gerinnt sie. Basis für Béarnaise.</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 04 MASSE & MENGEN -->
+    <section class="panel" id="masse">
+      <div class="section-label">Klassische Verhältnisse</div>
+      <div class="ratio-grid">
+        <div class="ratio-item">
+          <span class="r-label">Mehlschwitze</span>
+          <div class="r-value">1 : 1</div>
+          <div class="r-sub">Butter zu Mehl</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Vinaigrette</span>
+          <div class="r-value">3 : 1</div>
+          <div class="r-sub">Öl zu Säure</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Reis · Quellmethode</span>
+          <div class="r-value">1 : 1,5</div>
+          <div class="r-sub">Reis zu Wasser</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Pasta</span>
+          <div class="r-value">100 g</div>
+          <div class="r-sub">auf 1 L Wasser · 10 g Salz</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Salzlake (Brine)</span>
+          <div class="r-value">60 g</div>
+          <div class="r-sub">Salz auf 1 L Wasser (≈ 6 %)</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Pizzateig</span>
+          <div class="r-value">60–65 %</div>
+          <div class="r-sub">Wasser zur Mehlmenge</div>
+        </div>
+      </div>
+
+      <div class="section-label">Maße &amp; Umrechnung</div>
+      <div class="ref-table">
+        <div class="ref-row"><div class="ref-key">1 TL (Teelöffel)</div><div class="ref-val">= 5 ml</div></div>
+        <div class="ref-row"><div class="ref-key">1 EL (Esslöffel)</div><div class="ref-val">= 15 ml = 3 TL</div></div>
+        <div class="ref-row"><div class="ref-key">1 Tasse</div><div class="ref-val">≈ 150 ml (DE) bzw. 240 ml (US cup)</div></div>
+        <div class="ref-row"><div class="ref-key">1 Schuss</div><div class="ref-val">≈ 1 bis 2 EL Flüssigkeit</div></div>
+        <div class="ref-row"><div class="ref-key">1 Prise</div><div class="ref-val">was zwischen zwei Finger passt</div></div>
+        <div class="ref-row"><div class="ref-key">1 Messerspitze</div><div class="ref-val">sehr kleine Menge, knapp sichtbar</div></div>
+      </div>
+
+      <div class="section-label">Gewicht gängiger Zutaten (ungefähr)</div>
+      <div class="ref-table">
+        <div class="ref-row"><div class="ref-key">Mehl</div><div class="ref-val">1 EL ≈ 10 g · 100 ml ≈ 55 g</div></div>
+        <div class="ref-row"><div class="ref-key">Zucker</div><div class="ref-val">1 EL ≈ 12 bis 15 g</div></div>
+        <div class="ref-row"><div class="ref-key">Salz</div><div class="ref-val">1 TL ≈ 5 bis 6 g</div></div>
+        <div class="ref-row"><div class="ref-key">Butter</div><div class="ref-val">1 EL ≈ 15 g</div></div>
+        <div class="ref-row"><div class="ref-key">Reis (roh)</div><div class="ref-val">100 ml ≈ 80 g</div></div>
+        <div class="ref-row"><div class="ref-key">Wasser / Flüssigkeit</div><div class="ref-val">1 ml = 1 g · 1 EL = 15 g</div></div>
+      </div>
+
+      <div class="note">Tassenangaben sind ungenau, weil "Tasse" je nach Rezept und Land verschieden groß ist. Wo es genau sein muss (Backen), lieber die Waage nehmen.</div>
+    </section>
+
+    <!-- 05 BEGRIFFE -->
+    <section class="panel" id="begriffe">
+      <div class="section-label">Küchen-Vokabular von A bis Z</div>
+      <div class="glossary">
+        <div class="gloss-item"><div class="gloss-term">Ablöschen / Deglacieren</div><div class="gloss-def">Den Bratensatz am Pfannenboden mit Flüssigkeit lösen. Gibt viel Geschmack an die Sauce.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Al dente</div><div class="gloss-def">„Auf den Zahn". Pasta oder Gemüse mit leichtem Biss, nicht durchgekocht.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Aromaten</div><div class="gloss-def">Zwiebel, Knoblauch, Kräuter und Gewürze, die einer Speise das Grundaroma geben.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Bain-Marie</div><div class="gloss-def">Wasserbad. Schonendes Erhitzen ohne direkten Kontakt zur Hitzequelle.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Carryover-Cooking</div><div class="gloss-def">Nachgaren durch die Resthitze, nachdem das Fleisch aus der Pfanne oder dem Ofen kommt.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Emulgieren</div><div class="gloss-def">Fett und Wasser stabil verbinden, etwa in Mayonnaise oder Vinaigrette.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Fond</div><div class="gloss-def">Kräftiger Sud aus Knochen, Gemüse und Aromaten. Basis für Saucen und Suppen.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Glasieren</div><div class="gloss-def">Mit einer reduzierten, oft zuckerhaltigen Flüssigkeit überziehen. Gibt Glanz.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Karamellisieren</div><div class="gloss-def">Zucker oder Zwiebeln durch Hitze bräunen, bis süß-nussige Aromen entstehen.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Konfieren</div><div class="gloss-def">Sehr langsam in Fett bei niedriger Temperatur garen. Macht zart und haltbar.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Leidenfrost-Effekt</div><div class="gloss-def">Wassertropfen tanzt als Perle auf sehr heißer Pfanne. Zeigt die richtige Brattemperatur.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Maillard-Reaktion</div><div class="gloss-def">Bräunung von Eiweiß und Zucker bei Hitze. Quelle fast aller Röstaromen.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Marinieren</div><div class="gloss-def">Zutaten in eine Würzflüssigkeit einlegen, für mehr Geschmack und Zartheit.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Mirepoix / Soffritto</div><div class="gloss-def">Fein gewürfelte Zwiebel, Karotte und Sellerie als Geschmacksbasis.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Montieren</div><div class="gloss-def">Eine Sauce mit kalter Butter aufschlagen. Gibt Glanz und Bindung.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Panieren</div><div class="gloss-def">Mehl, Ei und Paniermehl als Hülle für eine knusprige Kruste.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Reduzieren</div><div class="gloss-def">Flüssigkeit offen einkochen, um Geschmack und Bindung zu konzentrieren.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Tranchieren</div><div class="gloss-def">Ein großes Stück Fleisch fachgerecht zerlegen und aufschneiden.</div></div>
+        <div class="gloss-item"><div class="gloss-term">Velveting</div><div class="gloss-def">Fleisch mit Natron oder Stärke behandeln, damit es seidig zart wird (asiatische Technik).</div></div>
+      </div>
+    </section>
+
+    <!-- 06 TEMPERATUREN -->
+    <section class="panel" id="temperatur">
+      <div class="section-label">Kerntemperatur · Fleisch &amp; Fisch</div>
+      <div class="ratio-grid">
+        <div class="ratio-item">
+          <span class="r-label">Rind / Lamm</span>
+          <div class="r-value">55–62 °C</div>
+          <div class="r-sub">Medium Rare bis Medium</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Schwein</span>
+          <div class="r-value">63–70 °C</div>
+          <div class="r-sub">rosa-saftig bis durch</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Geflügel</span>
+          <div class="r-value">72–74 °C</div>
+          <div class="r-sub">immer ganz durch</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Hackfleisch</span>
+          <div class="r-value">70–72 °C</div>
+          <div class="r-sub">immer ganz durch</div>
+        </div>
+        <div class="ratio-item">
+          <span class="r-label">Fisch</span>
+          <div class="r-value">50–55 °C</div>
+          <div class="r-sub">glasig bis gerade gar</div>
+        </div>
+      </div>
+
+      <div class="section-label">Öl · Rauchpunkte (ungefähr)</div>
+      <div class="ref-table">
+        <div class="ref-row"><div class="ref-key">Butter</div><div class="ref-val">ca. 150 °C · niedrige Hitze</div></div>
+        <div class="ref-row"><div class="ref-key">Natives Olivenöl extra</div><div class="ref-val">ca. 160 bis 190 °C · niedrig bis mittel</div></div>
+        <div class="ref-row"><div class="ref-key">Kokosöl</div><div class="ref-val">ca. 175 °C · mittel</div></div>
+        <div class="ref-row"><div class="ref-key">Rapsöl (raffiniert)</div><div class="ref-val">ca. 200 °C · mittel bis hoch</div></div>
+        <div class="ref-row"><div class="ref-key">Sonnenblumenöl (raffiniert)</div><div class="ref-val">ca. 225 °C · hoch</div></div>
+        <div class="ref-row"><div class="ref-key">Erdnussöl</div><div class="ref-val">ca. 230 °C · hoch</div></div>
+        <div class="ref-row"><div class="ref-key">Butterschmalz / Ghee</div><div class="ref-val"><span class="hot">ca. 250 °C · sehr hoch</span></div></div>
+      </div>
+
+      <div class="note">Faustregel: Je heißer du brätst, desto höher muss der Rauchpunkt sein. Für die genaue Steak-Garstufe inklusive Pfanne-raus-Temperaturen schau in deine Steak-Karte.</div>
+
+      <div class="pull-quote">
+        <div class="mark">„</div>
+        <p>Im Zweifel entscheidet die Kerntemperatur, nicht die Uhr.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      Lesen · Kochen · Abschmecken · Nachwürzen
+    </footer>
+
+  </div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.panel;
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Löten Referenz · Hobby Workshop</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a1a;background:#fff;padding:1.5rem;line-height:1.55}
+@media(prefers-color-scheme:dark){body{background:#1a1a1a;color:#e0e0e0}}
+h1{font-size:21px;font-weight:600;margin-bottom:.25rem}
+.sub{font-size:12.5px;color:#888;margin-bottom:1rem}
+h2{font-size:16px;font-weight:600;margin:1.6rem 0 .7rem;display:flex;align-items:center;gap:8px}
+h3{font-size:13.5px;font-weight:600;margin:1rem 0 .4rem;color:#0C447C}
+@media(prefers-color-scheme:dark){h3{color:#7FB4E8}}
+p{font-size:13px;margin-bottom:.5rem}
+ul{font-size:13px;margin:.3rem 0 .6rem 1.1rem}
+li{margin-bottom:.28rem}
+strong{font-weight:600}
+
+/* tab nav */
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;position:sticky;top:0;background:#fff;padding:.6rem 0;z-index:10;border-bottom:1px solid #eee}
+.tabs button{font-size:12px;padding:6px 12px;cursor:pointer;background:transparent;border:1px solid #ccc;border-radius:8px;color:#666;transition:all .15s;white-space:nowrap}
+.tabs button.active{background:#E6F1FB;color:#0C447C;border-color:#85B7EB;font-weight:500}
+.tabs button:hover{background:#f5f5f5}
+.panel{display:none;animation:fade .2s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin:.6rem 0}
+.card{border:1px solid #e0e0e0;border-radius:10px;padding:12px 14px;background:#fff}
+.card .ct{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.card .cd{font-size:12px;color:#666;margin-bottom:6px}
+.card ul{margin:.2rem 0 0 1rem;font-size:12px}
+.card li{margin-bottom:.2rem}
+
+/* badges */
+.b{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:7px;font-weight:600;letter-spacing:.2px}
+.b-kolben{background:#E6F1FB;color:#0C447C}
+.b-luft{background:#FAECE7;color:#712B13}
+.b-platte{background:#FAEEDA;color:#633806}
+.b-mat{background:#E1F5EE;color:#085041}
+.b-all{background:#EEEDFE;color:#3C3489}
+.b-warn{background:#FCEBEB;color:#791F1F}
+.b-ok{background:#E1F5EE;color:#085041}
+
+/* difficulty pills */
+.diff{font-size:11px;font-weight:600;padding:2px 8px;border-radius:7px;white-space:nowrap}
+.d1{background:#E1F5EE;color:#085041}
+.d2{background:#FAEEDA;color:#633806}
+.d3{background:#FCEBEB;color:#791F1F}
+
+/* table */
+.tbl-wrap{overflow-x:auto;margin:.5rem 0}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:640px}
+th{text-align:left;padding:8px 7px;font-weight:500;font-size:11.5px;color:#888;border-bottom:1px solid #ccc;cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:#1a1a1a}
+th .ar{font-size:10px;margin-left:2px}
+td{padding:8px 7px;border-bottom:1px solid #eee;vertical-align:top}
+tr:hover td{background:#f9f9f9}
+.search{padding:7px 11px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;width:260px;margin-bottom:.6rem}
+.filt{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.6rem}
+.filt button{font-size:11.5px;padding:4px 10px;cursor:pointer;background:transparent;border:1px solid #ccc;border-radius:7px;color:#666}
+.filt button.active{background:#E6F1FB;color:#0C447C;border-color:#85B7EB}
+
+/* steps */
+.steps{counter-reset:s;margin:.5rem 0}
+.step{position:relative;padding:10px 12px 10px 44px;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:8px;background:#fff;font-size:13px}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:12px;top:10px;width:22px;height:22px;border-radius:50%;background:#0C447C;color:#fff;font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.step b{font-weight:600}
+
+/* callouts */
+.note{border-left:3px solid #85B7EB;background:#F4F9FE;padding:9px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:.6rem 0}
+.tip{border-left:3px solid #1D9E75;background:#F0FAF6;padding:9px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:.6rem 0}
+.warn{border-left:3px solid #E24B4A;background:#FEF4F4;padding:9px 12px;border-radius:0 8px 8px 0;font-size:12.5px;margin:.6rem 0}
+.note b,.tip b,.warn b{font-weight:600}
+
+/* good vs bad joint */
+.gb{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:.6rem 0}
+@media(max-width:520px){.gb{grid-template-columns:1fr}.grid{grid-template-columns:1fr}}
+.gb-col{border:1px solid #e0e0e0;border-radius:10px;padding:12px}
+.gb-col h4{font-size:12.5px;margin-bottom:6px}
+.gb-col.good h4{color:#085041}
+.gb-col.bad h4{color:#791F1F}
+.gb-col ul{margin-left:1rem;font-size:12px}
+
+.legend{font-size:11.5px;color:#999;margin-top:1.2rem;padding-top:.8rem;border-top:1px solid #eee}
+
+@media(prefers-color-scheme:dark){
+.sub,.card .cd,.legend{color:#999}
+.tabs{background:#1a1a1a;border-bottom-color:#333}
+.tabs button{border-color:#555;color:#aaa}
+.tabs button:hover{background:#2a2a2a}
+.tabs button.active{background:#042C53;color:#B5D4F4;border-color:#185FA5}
+.card,.step,.gb-col{background:#2a2a2a;border-color:#3a3a3a}
+.search{background:#2a2a2a;border-color:#444;color:#e0e0e0}
+.filt button{border-color:#555;color:#aaa}
+.filt button.active{background:#042C53;color:#B5D4F4;border-color:#185FA5}
+th{color:#999;border-bottom-color:#444}
+th:hover{color:#e0e0e0}
+td{border-bottom-color:#333}
+tr:hover td{background:#252525}
+.step::before{background:#185FA5}
+.note{background:#0E2438;border-left-color:#185FA5}
+.tip{background:#0C2620;border-left-color:#1D9E75}
+.warn{background:#2E1414;border-left-color:#E24B4A}
+.legend{border-top-color:#333}
+.b-kolben{background:#042C53;color:#B5D4F4}
+.b-luft{background:#4A1B0C;color:#F5C4B3}
+.b-platte{background:#412402;color:#FAC775}
+.b-mat{background:#04342C;color:#9FE1CB}
+.b-all{background:#26215C;color:#CECBF6}
+.b-warn{background:#501313;color:#F7C1C1}
+.b-ok{background:#04342C;color:#9FE1CB}
+.d1{background:#04342C;color:#9FE1CB}
+.d2{background:#412402;color:#FAC775}
+.d3{background:#501313;color:#F7C1C1}
+}
+</style>
+</head>
+<body>
+<h1>Löten Referenz</h1>
+<div class="sub">Kompakter Überblick für Hobby Elektronik: THT, SMD, Heißluft und Heizplatte. Tippe auf eine Karte oder Tabelle für mehr.</div>
+
+<div class="tabs" id="tabs"></div>
+
+<!-- ============ METHODEN ============ -->
+<div class="panel active" data-p="methoden">
+<h2>Die drei Methoden im Überblick</h2>
+<p>Welches Werkzeug du nimmst, hängt vor allem vom Bauteil ab. Faustregel: Lötkolben für alles mit zugänglichen Pins, Heißluft für Bauteile mit versteckten Pads oder zum Entlöten, Heizplatte wenn viele SMD Teile auf einmal auf eine Platine sollen.</p>
+
+<div class="grid">
+<div class="card">
+<div class="ct"><span class="b b-kolben">Lötkolben</span></div>
+<div class="cd">Die Allzweckwaffe. Punktgenaue Hitze über eine Spitze.</div>
+<ul>
+<li><b>Stark bei:</b> THT (bedrahtete Teile), Chip SMD ab 0603, ICs mit sichtbaren Pins (SOIC, QFP), Kabel, Reparaturen</li>
+<li><b>Schwach bei:</b> Bauteile mit Pads nur unter dem Gehäuse (QFN, BGA)</li>
+<li><b>Pflicht:</b> temperaturgeregelte Station, keine Baumarkt Heizstäbe</li>
+</ul>
+</div>
+<div class="card">
+<div class="ct"><span class="b b-luft">Heißluft</span></div>
+<div class="cd">Heißer Luftstrom erwärmt das ganze Bauteil gleichmäßig.</div>
+<ul>
+<li><b>Stark bei:</b> QFN, QFP, kleine Chips, Entlöten von Multipin Bauteilen, Nacharbeit</li>
+<li><b>Schwach bei:</b> große Massflächen, einzelne dicke Kabel</li>
+<li><b>Achtung:</b> Nachbarbauteile mit Kapton schützen, Luftstrom nicht zu hoch</li>
+</ul>
+</div>
+<div class="card">
+<div class="ct"><span class="b b-platte">Heizplatte</span></div>
+<div class="cd">Erwärmt die ganze Platine von unten. Reflow im Kleinen.</div>
+<ul>
+<li><b>Stark bei:</b> komplette einseitige SMD Bestückung mit Lötpaste, Self Alignment, Serien</li>
+<li><b>Schwach bei:</b> doppelseitige Platinen, einzelne Korrekturen</li>
+<li><b>Bonus:</b> als Vorwärmer für Heißluft und BGA</li>
+</ul>
+</div>
+</div>
+
+<div class="note"><b>Realistisches Einsteiger Setup:</b> Eine gute Lötstation deckt 90 Prozent ab. Heißluft kommt dazu, sobald du QFN oder feine ICs verbaust. Eine Heizplatte lohnt erst, wenn du eigene SMD Platinen in kleinen Stückzahlen bestückst.</div>
+</div>
+
+<!-- ============ WORKFLOW ============ -->
+<div class="panel" data-p="workflow">
+<h2>Workflow am Lötkolben</h2>
+<p>Der Ablauf einer Session in Kurzform, plus Kurzrezepte für die häufigsten Aufgaben. Details stehen in den Tabs THT, SMD und Fehler.</p>
+
+<h3>Jede Session</h3>
+<div class="steps">
+<div class="step"><b>Aufheizen und verzinnen.</b> Spitze sauber abstreifen, frisch benetzen. Sie muss glänzen.</div>
+<div class="step"><b>Temperatur wählen.</b> Bleihaltig rund 320 Grad, bleifrei rund 360 Grad.</div>
+<div class="step"><b>Fixieren.</b> Platine in die dritte Hand, Bauteile und Flux bereitlegen.</div>
+<div class="step"><b>Löten.</b> Beide Teile erwärmen, Lot ans Werkstück, wenige Sekunden.</div>
+<div class="step"><b>Prüfen.</b> Sichtkontrolle, bei Bedarf Durchgang messen.</div>
+<div class="step"><b>Reinigen und parken.</b> Fluxreste mit IPA weg, Spitze dick verzinnt ausschalten.</div>
+</div>
+
+<h3>Kurzrezepte</h3>
+<div class="grid">
+<div class="card">
+<div class="ct"><span class="b b-kolben">THT</span> Lötstelle</div>
+<ul>
+<li>Bauteil einstecken, Beinchen leicht spreizen</li>
+<li>Spitze an Pad und Bein, etwa 2 Sekunden</li>
+<li>Lot zugeben, bis sich eine Kehle bildet</li>
+<li>Erst Lot, dann Spitze weg, Bein kürzen</li>
+</ul>
+</div>
+<div class="card">
+<div class="ct"><span class="b b-all">SMD</span> Chip (0603 bis 1206)</div>
+<ul>
+<li>Ein Pad verzinnen</li>
+<li>Bauteil mit Pinzette ins schmelzende Lot schieben</li>
+<li>Sitzt es gerade? Dann zweite Seite löten</li>
+</ul>
+</div>
+<div class="card">
+<div class="ct"><span class="b b-all">SMD</span> IC mit Pins (Drag)</div>
+<ul>
+<li>Eckpin tacken, ausrichten, Gegenecke löten</li>
+<li>Reichlich Flux über alle Pins</li>
+<li>Mit etwas Lot langsam über die Reihe ziehen</li>
+<li>Brücken mit Entlötlitze abziehen, prüfen</li>
+</ul>
+</div>
+<div class="card">
+<div class="ct"><span class="b b-warn">Entlöten</span> ohne Heißluft</div>
+<ul>
+<li>THT: Lot schmelzen, mit Pumpe absaugen oder Litze</li>
+<li>SMD Chip: beide Pads abwechselnd heizen, wegkippen</li>
+<li>Litze auflegen, Spitze drauf, Lot saugt ein</li>
+</ul>
+</div>
+</div>
+
+<div class="tip"><b>Schnellhilfe:</b> Lot fließt nicht? Heißer plus mehr Flux, Spitze sauber. Brücke? Flux und Entlötlitze. Matt und kugelig? War zu kalt, einfach nochmal aufschmelzen.</div>
+</div>
+
+<!-- ============ EQUIPMENT ============ -->
+<div class="panel" data-p="equipment">
+<h2>Equipment und Werkzeuge</h2>
+<h3>Kernwerkzeuge</h3>
+<div class="grid">
+<div class="card"><div class="ct">Lötstation (geregelt)</div><div class="cd">Herzstück. Stellt Temperatur konstant.</div><ul><li>Wechselbare Spitzen wichtig</li><li>Schnelles Aufheizen spart Nerven</li><li>Beispiele Marken: Hakko, JBC, Pinecil, Weller</li></ul></div>
+<div class="card"><div class="ct">Lötspitzen</div><div class="cd">Form bestimmt Wärmeübertragung.</div><ul><li><b>Meißel / Chisel:</b> Allrounder, gibt viel Wärme ab</li><li><b>Bleistift / Conical:</b> Feinarbeit, wenig Kontakt</li><li><b>Hufeisen / Hoof:</b> Drag Soldering, hält Lot</li></ul></div>
+<div class="card"><div class="ct">Heißluftstation</div><div class="cd">Temperatur und Luftstrom getrennt regelbar.</div><ul><li>Verschiedene Düsen je Bauteilgröße</li><li>Luftstrom regelbar ist Pflicht</li></ul></div>
+<div class="card"><div class="ct">Heizplatte / Preheater</div><div class="cd">Mini Reflow und Vorwärmung.</div><ul><li>Gleichmäßige Temperatur wichtig</li><li>Manche mit Profilsteuerung</li></ul></div>
+</div>
+<h3>Halten, Sehen, Reinigen</h3>
+<div class="grid">
+<div class="card"><div class="ct">Pinzetten (ESD)</div><div class="cd">Gerade und gebogen. Für SMD unverzichtbar.</div></div>
+<div class="card"><div class="ct">Dritte Hand / PCB Halter</div><div class="cd">Fixiert Platine und Kabel. Klemmt freie Hände frei.</div></div>
+<div class="card"><div class="ct">Lupe / Mikroskop</div><div class="cd">Ab feinem SMD echtes Mikroskop ein Gamechanger. Sonst Lupenlampe.</div></div>
+<div class="card"><div class="ct">Messingwolle + Schwamm</div><div class="cd">Spitze zwischendurch abstreifen. Messingwolle schont mehr als nasser Schwamm.</div></div>
+<div class="card"><div class="ct">Multimeter</div><div class="cd">Durchgangsprüfung auf Lötbrücken und kalte Stellen.</div></div>
+<div class="card"><div class="ct">Lötrauchabsaugung</div><div class="cd">Aktivkohlefilter. Hält Flussmitteldämpfe aus dem Gesicht. <span class="b b-warn">wichtig</span></div></div>
+</div>
+<h3>Entlöten</h3>
+<div class="grid">
+<div class="card"><div class="ct">Entlötlitze (Wick)</div><div class="cd">Kupfergeflecht saugt flüssiges Lot auf. Top für Pads und Brücken.</div></div>
+<div class="card"><div class="ct">Entlötpumpe</div><div class="cd">Saugt geschmolzenes Lot weg. Gut für THT Durchkontaktierungen.</div></div>
+<div class="card"><div class="ct">Heißluft</div><div class="cd">Beste Methode um ganze SMD Bauteile schadenfrei abzuheben.</div></div>
+</div>
+</div>
+
+<!-- ============ MATERIAL ============ -->
+<div class="panel" data-p="material">
+<h2>Verbrauchsmaterial</h2>
+
+<h3>Lötzinn (Lot)</h3>
+<p>Zwei Welten: bleihaltig lötet sich angenehmer und bei niedrigerer Temperatur, bleifrei ist RoHS konform und für alles gedacht, das in den Verkauf geht.</p>
+<ul>
+<li><b>Sn63Pb37 (bleihaltig, eutektisch):</b> schmilzt scharf bei 183 Grad, verzeiht am meisten. Beliebt im Hobby.</li>
+<li><b>SAC305 (bleifrei):</b> schmilzt bei rund 217 bis 220 Grad, braucht heißere Spitze, matter im Ergebnis.</li>
+<li><b>Durchmesser:</b> 0,5 bis 0,7 mm für SMD und Feinarbeit, 1,0 mm für THT und Kabel.</li>
+<li><b>Immer mit Flussmittelseele</b> (Kolophonium im Kern), niemals Sanitärlot.</li>
+</ul>
+
+<h3>Flussmittel (Flux)</h3>
+<p>Entfernt Oxidschicht und lässt Lot fließen und benetzen. Bei SMD der wichtigste Helfer überhaupt.</p>
+<ul>
+<li><b>No Clean:</b> Rückstand darf meist drauf bleiben. Bequem für Hobby.</li>
+<li><b>Kolophonium / Rosin (RMA):</b> Klassiker, Rückstände mit IPA entfernen.</li>
+<li><b>Wasserlöslich:</b> aggressiv, muss zwingend gründlich abgewaschen werden.</li>
+<li><b>Formen:</b> Flux Pen, Spritze, Tacky Flux (zähe Paste, hält Bauteile leicht fest).</li>
+</ul>
+
+<h3>Lötpaste (Solder Paste)</h3>
+<p>Gemisch aus winzigen Lotkügelchen und Flussmittel. Nur für Reflow per Heizplatte, Heißluft oder Ofen.</p>
+<ul>
+<li><b>Korngröße:</b> T3 oder T4 für Hobby, T4/T5 für sehr feinen Pitch.</li>
+<li><b>Auftrag:</b> per Schablone (Stencil) oder dünn mit der Spritze auf die Pads.</li>
+<li><b>Lagerung:</b> kühl (Kühlschrank), vor Gebrauch auf Raumtemperatur bringen, begrenzte Haltbarkeit.</li>
+</ul>
+
+<div class="grid" style="margin-top:1rem">
+<div class="card"><div class="ct">Tip Tinner</div><div class="cd">Aktivator Paste rettet oxidierte, nicht mehr benetzende Spitzen.</div></div>
+<div class="card"><div class="ct">Isopropanol (IPA)</div><div class="cd">Reinigt Flussmittelrückstände. Brennbar, gut lüften.</div></div>
+<div class="card"><div class="ct">Kapton Tape</div><div class="cd">Hitzefestes Klebeband. Fixiert Bauteile, schützt Nachbarn bei Heißluft.</div></div>
+</div>
+</div>
+
+<!-- ============ TEMPERATUREN ============ -->
+<div class="panel" data-p="temp">
+<h2>Temperaturen</h2>
+<p>Richtwerte. Höher heißt nicht besser: zu viel Hitze beschädigt Pads und Bauteile, zu wenig gibt kalte Stellen. Spitze und Lot passen, dann reicht meist die untere Hälfte des Bereichs.</p>
+<div class="tbl-wrap">
+<table id="tempTbl"><thead></thead><tbody></tbody></table>
+</div>
+
+<h3>Reflow Profil (Heizplatte / Ofen)</h3>
+<p>Die Platine durchläuft vier Phasen. Bei der Heizplatte steuerst du das grob über das Hochregeln der Temperatur.</p>
+<div class="steps">
+<div class="step"><b>Vorheizen (Preheat).</b> Von Raumtemperatur auf rund 150 Grad, langsam mit etwa 1 bis 2 Grad pro Sekunde. Schützt vor Thermoschock.</div>
+<div class="step"><b>Soak.</b> 150 bis 180 Grad für 60 bis 120 Sekunden halten. Flussmittel aktiviert sich, Temperatur gleicht sich aus.</div>
+<div class="step"><b>Reflow (Peak).</b> Kurz über den Schmelzpunkt: bleihaltig rund 205 bis 215 Grad, bleifrei rund 240 bis 250 Grad. Lot wird flüssig, Bauteile zentrieren sich selbst.</div>
+<div class="step"><b>Abkühlen.</b> Kontrolliert herunter. Platine in dieser Phase nicht bewegen, sonst kalte Stellen.</div>
+</div>
+<div class="tip"><b>Self Alignment:</b> Bei Reflow zieht die Oberflächenspannung des flüssigen Lots leicht schief gesetzte Bauteile gerade. Kleine Platzierfehler korrigieren sich also von selbst.</div>
+</div>
+
+<!-- ============ BAUTEILE ============ -->
+<div class="panel" data-p="bauteile">
+<h2>Bauteile und Bauformen</h2>
+<p>Filtere nach Typ und sieh, wie schwer das Teil von Hand zu löten ist und womit.</p>
+<input class="search" id="cq" type="text" placeholder="Bauteil suchen...">
+<div class="filt" id="cfilt"></div>
+<div class="tbl-wrap">
+<table id="compTbl"><thead></thead><tbody></tbody></table>
+</div>
+<div class="note"><b>Pitch</b> ist der Abstand von Pinmitte zu Pinmitte. Je kleiner der Pitch, desto eher brauchst du Flux, Entlötlitze und ein Mikroskop.</div>
+</div>
+
+<!-- ============ ABLAUF THT ============ -->
+<div class="panel" data-p="tht">
+<h2><span class="b b-kolben">Lötkolben</span> THT löten</h2>
+<p>THT steht für Through Hole Technology, also bedrahtete Bauteile durch Bohrungen. Der einfachste Einstieg.</p>
+<div class="steps">
+<div class="step"><b>Spitze vorbereiten.</b> Aufheizen, abstreifen, frisch verzinnen. Eine saubere, glänzende Spitze überträgt Wärme.</div>
+<div class="step"><b>Bauteil einsetzen.</b> Durch die Bohrung stecken, Beinchen auf der Rückseite leicht spreizen, damit es hält.</div>
+<div class="step"><b>Beide Teile erwärmen.</b> Spitze gleichzeitig an Pad und Beinchen anlegen, ein bis zwei Sekunden.</div>
+<div class="step"><b>Lot zuführen.</b> Lot an die Lötstelle geben, nicht an die Spitze. Es muss am erwärmten Werkstück schmelzen.</div>
+<div class="step"><b>Fließen lassen.</b> Lot zieht in das Loch und bildet eine kleine Kehle, vulkanförmig um das Beinchen.</div>
+<div class="step"><b>Reihenfolge beim Lösen.</b> Erst Lot wegnehmen, dann die Spitze. So bleibt die Form sauber.</div>
+<div class="step"><b>Beinchen kürzen.</b> Überstand mit Seitenschneider knapp über der Lötstelle abschneiden.</div>
+</div>
+<div class="gb">
+<div class="gb-col good"><h4>Gute Lötstelle</h4><ul><li>Glänzend (bleihaltig) oder gleichmäßig matt (bleifrei)</li><li>Konkave Kehle, sauber benetzt</li><li>Lot umschließt Pad und Beinchen</li></ul></div>
+<div class="gb-col bad"><h4>Kalte / schlechte Stelle</h4><ul><li>Kugelig, klumpig, schlecht benetzt</li><li>Rissig oder körnig</li><li>Lot sitzt auf, statt zu fließen</li></ul></div>
+</div>
+<div class="warn"><b>Polung beachten:</b> Elkos, Dioden, LEDs und ICs sind gepolt. Markierung prüfen, bevor du lötest. Falsch herum kann das Bauteil sofort zerstören.</div>
+</div>
+
+<!-- ============ ABLAUF SMD ============ -->
+<div class="panel" data-p="smd">
+<h2><span class="b b-kolben">Lötkolben</span> SMD löten</h2>
+<h3>Chip Bauteile (Widerstand, Kondensator, 0603 bis 1206)</h3>
+<div class="steps">
+<div class="step"><b>Ein Pad verzinnen.</b> Nur eines der beiden Pads mit etwas Lot vorbereiten.</div>
+<div class="step"><b>Bauteil halten und antippen.</b> Mit der Pinzette positionieren, Spitze auf das verzinnte Pad, Bauteil rutscht in das schmelzende Lot.</div>
+<div class="step"><b>Ausrichtung prüfen.</b> Sitzt es gerade und plan auf beiden Pads?</div>
+<div class="step"><b>Zweite Seite löten.</b> Das andere Pad normal verlöten. Fertig.</div>
+</div>
+
+<h3>ICs mit vielen Pins (SOIC, TSSOP, QFP) per Drag Soldering</h3>
+<div class="steps">
+<div class="step"><b>Pads verzinnen, IC fixieren.</b> Einen Eckpin antacken, Ausrichtung exakt prüfen, dann diagonalen Eckpin festlöten.</div>
+<div class="step"><b>Großzügig Flux.</b> Über alle Pins flüssiges Flussmittel auftragen. Das ist der Trick.</div>
+<div class="step"><b>Drag.</b> Mit etwas Lot an der Spitze langsam über die Pinreihe ziehen. Flux verhindert Brücken.</div>
+<div class="step"><b>Brücken entfernen.</b> Verbleibende Brücken mit Entlötlitze und Flux abziehen.</div>
+<div class="step"><b>Kontrolle.</b> Unter Lupe oder Mikroskop jeden Pin prüfen, Durchgang testen.</div>
+</div>
+<div class="tip"><b>Merksatz für feine ICs:</b> Lieber bewusst Brücken ziehen und dann mit Litze sauber abziehen, als jeden Pin einzeln zu treffen. Flux macht den Unterschied.</div>
+</div>
+
+<!-- ============ ABLAUF HEISSLUFT ============ -->
+<div class="panel" data-p="heissluft">
+<h2><span class="b b-luft">Heißluft</span> löten und entlöten</h2>
+<h3>Bauteil setzen (z.B. QFN)</h3>
+<div class="steps">
+<div class="step"><b>Pads vorbereiten.</b> Dünn Lötpaste auftragen oder Pads verzinnen und Flux dazu.</div>
+<div class="step"><b>Bauteil platzieren.</b> Mit Pinzette grob ausrichten. Grobe Genauigkeit reicht wegen Self Alignment.</div>
+<div class="step"><b>Düse und Werte wählen.</b> Düsengröße passend zum Bauteil, Temperatur je nach Lot, Luftstrom eher niedrig.</div>
+<div class="step"><b>Gleichmäßig erhitzen.</b> Kreisende Bewegung über dem Bauteil, bis das Lot sichtbar fließt und das Teil leicht einrastet.</div>
+<div class="step"><b>Abkühlen lassen.</b> Nicht anpusten, nicht bewegen, bis das Lot fest ist.</div>
+</div>
+<h3>Bauteil entlöten</h3>
+<div class="steps">
+<div class="step"><b>Umgebung schützen.</b> Nachbarbauteile mit Kapton abdecken.</div>
+<div class="step"><b>Flux dazu.</b> Etwas Flussmittel rund um das Bauteil hilft beim gleichmäßigen Aufschmelzen.</div>
+<div class="step"><b>Gleichmäßig erhitzen.</b> Ganzes Bauteil erwärmen, bis alle Lötstellen flüssig sind.</div>
+<div class="step"><b>Abheben.</b> Mit der Pinzette sanft anheben, nicht hebeln. Pads schonen.</div>
+</div>
+<div class="warn"><b>Wegblas Gefahr:</b> Zu hoher Luftstrom schießt kleine Chips quer über die Platine. Lieber heißer und langsamer als stürmisch.</div>
+</div>
+
+<!-- ============ ABLAUF HEIZPLATTE ============ -->
+<div class="panel" data-p="heizplatte">
+<h2><span class="b b-platte">Heizplatte</span> Reflow</h2>
+<p>Ideal um eine einseitig bestückte SMD Platine in einem Rutsch zu löten.</p>
+<div class="steps">
+<div class="step"><b>Lötpaste auftragen.</b> Per Schablone über alle Pads oder mit der Spritze dünn pro Pad. Weniger ist mehr.</div>
+<div class="step"><b>Bestücken.</b> Alle Bauteile mit der Pinzette setzen. Reihenfolge egal, grobe Ausrichtung reicht.</div>
+<div class="step"><b>Auf die Platte.</b> Platine plan auflegen, nichts darf wackeln.</div>
+<div class="step"><b>Profil hochfahren.</b> Vorheizen, Soak, dann hoch bis das Lot überall fließt (siehe Tab Temperaturen).</div>
+<div class="step"><b>Reflow beobachten.</b> Die Pasten Bröckchen verlaufen schlagartig glänzend, Bauteile zentrieren sich.</div>
+<div class="step"><b>Runterregeln und abkühlen.</b> Platte aus, Platine ruhen lassen, bis alles fest ist.</div>
+</div>
+<div class="note"><b>Doppelseitig?</b> Die zweite Seite ist heikel, weil die erste Seite wieder aufschmelzen kann. Für Hobby meist: schwere Teile auf die Reflow Seite, leichte Seite danach per Lötkolben oder Heißluft mit Kleberpunkten.</div>
+</div>
+
+<!-- ============ FEHLER ============ -->
+<div class="panel" data-p="fehler">
+<h2>Typische Fehler und Lösungen</h2>
+<div class="tbl-wrap">
+<table id="errTbl"><thead></thead><tbody></tbody></table>
+</div>
+</div>
+
+<!-- ============ SICHERHEIT ============ -->
+<div class="panel" data-p="sicherheit">
+<h2>Sicherheit und Gesundheit</h2>
+<div class="grid">
+<div class="card"><div class="ct">Lötrauch <span class="b b-warn">wichtig</span></div><div class="cd">Der sichtbare Rauch ist verdampftes Flussmittel, nicht Blei. Reizt Atemwege.</div><ul><li>Absaugung mit Aktivkohle oder gut lüften</li><li>Nicht direkt über der Lötstelle einatmen</li></ul></div>
+<div class="card"><div class="ct">Blei (bei bleihaltigem Lot)</div><div class="cd">Gefahr ist die Aufnahme über die Hände, nicht der Dampf.</div><ul><li>Nach dem Löten Hände waschen</li><li>Am Arbeitsplatz nicht essen oder trinken</li></ul></div>
+<div class="card"><div class="ct">Verbrennungen</div><div class="cd">Spitze und Heißluft sind sehr heiß, Bauteile bleiben lange heiß.</div><ul><li>Kolben immer in den Halter</li><li>Heiße Teile nicht mit den Fingern prüfen</li></ul></div>
+<div class="card"><div class="ct">ESD Schutz</div><div class="cd">Statische Entladung killt empfindliche ICs unbemerkt.</div><ul><li>Erdungsarmband und ESD Matte bei kritischen Teilen</li><li>ESD Pinzetten verwenden</li></ul></div>
+<div class="card"><div class="ct">IPA und Flux</div><div class="cd">Isopropanol ist leicht entzündlich.</div><ul><li>Fern von der heißen Spitze halten</li><li>Augenschutz, falls Flux spritzt</li></ul></div>
+<div class="card"><div class="ct">Arbeitsplatz</div><div class="cd">Ordnung verhindert Unfälle.</div><ul><li>Hitzefeste Unterlage</li><li>Kabel so legen, dass nichts hängen bleibt</li></ul></div>
+</div>
+</div>
+
+<!-- ============ REGELN ============ -->
+<div class="panel" data-p="regeln">
+<h2>Goldene Regeln</h2>
+<div class="grid">
+<div class="card"><div class="ct">1. Beide Teile erwärmen</div><div class="cd">Pad und Bauteil zusammen. Lot fließt nur auf eine ausreichend heiße Stelle.</div></div>
+<div class="card"><div class="ct">2. Lot ans Werkstück</div><div class="cd">Nicht an die Spitze halten. Es soll an der Lötstelle schmelzen, nicht auf der Spitze.</div></div>
+<div class="card"><div class="ct">3. Saubere, verzinnte Spitze</div><div class="cd">Regelmäßig abstreifen und frisch verzinnen. Oxid blockiert die Wärme.</div></div>
+<div class="card"><div class="ct">4. Flux, Flux, Flux</div><div class="cd">Bei SMD löst Flussmittel die meisten Probleme schon vorher.</div></div>
+<div class="card"><div class="ct">5. Richtige Temperatur</div><div class="cd">So niedrig wie es sauber fließt. Zu heiß zerstört Pads und Bauteile.</div></div>
+<div class="card"><div class="ct">6. Schnell und gezielt</div><div class="cd">Wenige Sekunden pro Stelle. Lange Hitze hebt Pads an.</div></div>
+<div class="card"><div class="ct">7. Spitze parken</div><div class="cd">Vor dem Ausschalten dick verzinnen. Schützt vor Oxidation, verlängert die Lebensdauer.</div></div>
+<div class="card"><div class="ct">8. Sehen können</div><div class="cd">Gute Beleuchtung und Vergrößerung. Halbe Miete bei SMD.</div></div>
+<div class="card"><div class="ct">9. An Schrott üben</div><div class="cd">Alte Platinen sind das beste Trainingsmaterial, bevor es um das echte Projekt geht.</div></div>
+<div class="card"><div class="ct">10. Prüfen statt hoffen</div><div class="cd">Sichtkontrolle plus Durchgangstest, bevor du Strom anlegst.</div></div>
+</div>
+</div>
+
+<div class="legend">Richtwerte für Hobby Elektronik. Temperaturen und Materialien je nach Hersteller, Spitze und Bauteil anpassen. Im Zweifel an einem Reststück testen.</div>
+
+<script>
+/* ---------- TABS ---------- */
+const TABS=[
+{p:"methoden",l:"Methoden"},{p:"workflow",l:"Workflow"},{p:"equipment",l:"Equipment"},{p:"material",l:"Material"},
+{p:"temp",l:"Temperaturen"},{p:"bauteile",l:"Bauteile"},{p:"tht",l:"THT löten"},
+{p:"smd",l:"SMD löten"},{p:"heissluft",l:"Heißluft"},{p:"heizplatte",l:"Heizplatte"},
+{p:"fehler",l:"Fehler"},{p:"sicherheit",l:"Sicherheit"},{p:"regeln",l:"Regeln"}
+];
+const tabsDiv=document.getElementById("tabs");
+TABS.forEach((t,i)=>{
+const b=document.createElement("button");
+b.textContent=t.l;b.className=i===0?"active":"";
+b.onclick=()=>{
+document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("active"));
+document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+b.classList.add("active");
+document.querySelector('.panel[data-p="'+t.p+'"]').classList.add("active");
+window.scrollTo({top:0,behavior:"smooth"});
+};
+tabsDiv.appendChild(b);
+});
+
+/* ---------- TEMPERATUR TABELLE ---------- */
+const TEMP=[
+{an:"Sn63Pb37 bleihaltig",schmelz:"183 °C",tool:"Lötkolben 300–320 °C",note:"Eutektisch, verzeiht am meisten"},
+{an:"Sn60Pb40 bleihaltig",schmelz:"183–190 °C",tool:"Lötkolben 300–320 °C",note:"Sehr gängig, gut benetzend"},
+{an:"SAC305 bleifrei",schmelz:"217–220 °C",tool:"Lötkolben 350–370 °C",note:"RoHS, heißere Spitze nötig"},
+{an:"Sn99,3Cu0,7 bleifrei",schmelz:"227 °C",tool:"Lötkolben 360–380 °C",note:"Günstig, etwas zäher"},
+{an:"Heißluft SMD bleihaltig",schmelz:"—",tool:"Luft 280–320 °C",note:"Luftstrom niedrig halten"},
+{an:"Heißluft SMD bleifrei",schmelz:"—",tool:"Luft 320–360 °C",note:"Nachbarn mit Kapton schützen"},
+{an:"Reflow Peak bleihaltig",schmelz:"—",tool:"Platte ~205–215 °C",note:"Kurz über Schmelzpunkt"},
+{an:"Reflow Peak bleifrei",schmelz:"—",tool:"Platte ~240–250 °C",note:"Profil einhalten"},
+{an:"Schrumpfschlauch",schmelz:"—",tool:"Luft 100–150 °C",note:"Niedrig, sonst Verbrennung"}
+];
+buildSortable("tempTbl",
+[{k:"an",l:"Anwendung / Lot"},{k:"schmelz",l:"Schmelzpunkt"},{k:"tool",l:"Werkzeug Temperatur"},{k:"note",l:"Notiz"}],
+TEMP);
+
+/* ---------- FEHLER TABELLE ---------- */
+const ERR=[
+{f:"Kalte Lötstelle",s:"Matt, kugelig, rissig, schlecht benetzt",l:"Mehr Hitze und Zeit, beide Teile erwärmen, neu verflüssigen"},
+{f:"Lötbrücke",s:"Zwei Pins/Pads ungewollt verbunden",l:"Flux auftragen, Überschuss mit Entlötlitze abziehen"},
+{f:"Spitze benetzt nicht",s:"Lot perlt ab, keine Wärmeübertragung",l:"Spitze oxidiert: Tip Tinner, neu verzinnen, nicht trocken heiß lassen"},
+{f:"Tombstoning",s:"Chip stellt sich beim Reflow senkrecht auf",l:"Pads gleichmäßig erwärmen, Pastenmenge und Pad Design prüfen"},
+{f:"Lifted Pad",s:"Kupferpad reißt von der Platine ab",l:"Weniger Hitze und Zeit, nicht hebeln, nie zu lange an einer Stelle"},
+{f:"Kein Durchgang",s:"Verbindung trotz Lötstelle tot",l:"Kalte Stelle oder Haarriss: nachlöten, mit Multimeter prüfen"},
+{f:"Bauteil zu heiß geworden",s:"Verfärbung, IC funktioniert nicht",l:"Niedrigere Temperatur, kürzer arbeiten, empfindliche Teile zuletzt"},
+{f:"Viel Rauch, Spritzer",s:"Flux verbrennt sofort",l:"Temperatur zu hoch oder zu lange, niedriger ansetzen"}
+];
+buildSortable("errTbl",
+[{k:"f",l:"Problem"},{k:"s",l:"Symptom"},{k:"l",l:"Lösung"}],
+ERR);
+
+/* ---------- BAUTEIL TABELLE (filter + suche) ---------- */
+const COMP=[
+{n:"Widerstand / Folien-C (THT)",typ:"THT",pol:"nein",pitch:"groß",diff:1,tool:"Lötkolben",note:"Idealer Einstieg, ungepolt"},
+{n:"Elko (THT)",typ:"THT",pol:"ja",pitch:"groß",diff:1,tool:"Lötkolben",note:"Minusstreifen markiert, Polung beachten"},
+{n:"LED / Diode (THT)",typ:"THT",pol:"ja",pitch:"groß",diff:1,tool:"Lötkolben",note:"Kathode markiert / längeres Bein +"},
+{n:"Transistor TO-92 / TO-220",typ:"THT",pol:"ja",pitch:"groß",diff:1,tool:"Lötkolben",note:"Pinbelegung aus Datenblatt"},
+{n:"DIP IC (THT)",typ:"THT",pol:"ja",pitch:"2,54 mm",diff:1,tool:"Lötkolben",note:"Kerbe oder Punkt = Pin 1"},
+{n:"Stift- / Buchsenleiste",typ:"THT",pol:"nein",pitch:"2,54 mm",diff:1,tool:"Lötkolben",note:"Erst Eckpin tacken, dann ausrichten"},
+{n:"Chip 1206",typ:"SMD",pol:"teils",pitch:"groß",diff:1,tool:"Lötkolben",note:"Größtes Chip Format, sehr gut von Hand"},
+{n:"Chip 0805",typ:"SMD",pol:"teils",pitch:"groß",diff:1,tool:"Lötkolben",note:"Einsteigerfreundlich für SMD"},
+{n:"Chip 0603",typ:"SMD",pol:"teils",pitch:"klein",diff:2,tool:"Lötkolben",note:"Mit Übung gut machbar"},
+{n:"Chip 0402",typ:"SMD",pol:"teils",pitch:"sehr klein",diff:3,tool:"Heißluft / Reflow",note:"Pinzette und ruhige Hand nötig"},
+{n:"Chip 0201",typ:"SMD",pol:"teils",pitch:"winzig",diff:3,tool:"Reflow",note:"Von Hand kaum sinnvoll"},
+{n:"SOT-23",typ:"SMD",pol:"ja",pitch:"groß",diff:1,tool:"Lötkolben",note:"Kleiner Transistor, einfach"},
+{n:"SOIC / SOP",typ:"SMD",pol:"ja",pitch:"1,27 mm",diff:1,tool:"Lötkolben",note:"Breite Pins, gut lötbar"},
+{n:"TSSOP",typ:"SMD",pol:"ja",pitch:"0,65 mm",diff:2,tool:"Lötkolben (Drag)",note:"Flux und Litze helfen"},
+{n:"QFP / TQFP",typ:"SMD",pol:"ja",pitch:"0,4–0,8 mm",diff:2,tool:"Lötkolben (Drag) / Heißluft",note:"Drag Soldering ideal"},
+{n:"QFN / DFN",typ:"SMD",pol:"ja",pitch:"versteckt",diff:3,tool:"Heißluft / Reflow",note:"Pads unter dem Gehäuse"},
+{n:"BGA",typ:"SMD",pol:"ja",pitch:"Kugeln",diff:3,tool:"Heißluft / Reflow",note:"Lötkugeln unten, nur mit Vorwärmung, Profi"}
+];
+const compCols=[
+{k:"n",l:"Bauteil"},{k:"typ",l:"Typ"},{k:"pol",l:"Gepolt"},{k:"pitch",l:"Pitch / Raster"},
+{k:"diff",l:"Schwierigkeit",diff:1},{k:"tool",l:"Empfohlen"},{k:"note",l:"Notiz"}
+];
+const COMPF=[{k:"all",l:"Alle"},{k:"THT",l:"THT"},{k:"SMD",l:"SMD"}];
+let cFilter="all",cSort="n",cDir=1;
+const cfiltDiv=document.getElementById("cfilt");
+COMPF.forEach(f=>{
+const b=document.createElement("button");b.textContent=f.l;b.className=f.k==="all"?"active":"";
+b.onclick=()=>{cFilter=f.k;cfiltDiv.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderComp()};
+cfiltDiv.appendChild(b);
+});
+document.getElementById("cq").addEventListener("input",renderComp);
+function diffPill(d){const cls="d"+d;const lbl=d===1?"einfach":d===2?"mittel":"schwer";return '<span class="diff '+cls+'">'+lbl+'</span>';}
+function renderComp(){
+const q=document.getElementById("cq").value.toLowerCase();
+let data=COMP.filter(c=>(cFilter==="all"||c.typ===cFilter)&&(!q||c.n.toLowerCase().includes(q)||c.note.toLowerCase().includes(q)||c.tool.toLowerCase().includes(q)));
+data.sort((a,b)=>{let av=a[cSort],bv=b[cSort];if(typeof av==="string")return cDir*av.localeCompare(bv);return cDir*(av-bv)});
+const th="<tr>"+compCols.map(c=>'<th onclick="csort(\''+c.k+'\')">'+c.l+'<span class="ar">'+(cSort===c.k?(cDir===1?"▲":"▼"):"")+'</span></th>').join("")+"</tr>";
+document.querySelector("#compTbl thead").innerHTML=th;
+let tb="";
+data.forEach(c=>{
+tb+="<tr>";
+compCols.forEach(col=>{
+if(col.diff){tb+="<td>"+diffPill(c.diff)+"</td>";}
+else if(col.k==="typ"){const bc=c.typ==="THT"?"b-kolben":"b-all";tb+='<td><span class="b '+bc+'">'+c.typ+'</span></td>';}
+else{tb+="<td>"+c[col.k]+"</td>";}
+});
+tb+="</tr>";
+});
+document.querySelector("#compTbl tbody").innerHTML=tb;
+}
+window.csort=function(k){if(cSort===k)cDir*=-1;else{cSort=k;cDir=1}renderComp()};
+renderComp();
+
+/* ---------- generic sortable table builder ---------- */
+function buildSortable(id,cols,rows){
+let sc=cols[0].k,sd=1;
+function r(){
+const data=[...rows].sort((a,b)=>{let av=a[sc],bv=b[sc];return sd*String(av).localeCompare(String(bv),"de",{numeric:true})});
+const th="<tr>"+cols.map(c=>'<th data-k="'+c.k+'">'+c.l+'<span class="ar">'+(sc===c.k?(sd===1?"▲":"▼"):"")+'</span></th>').join("")+"</tr>";
+document.querySelector("#"+id+" thead").innerHTML=th;
+document.querySelectorAll("#"+id+" thead th").forEach(t=>t.onclick=()=>{const k=t.getAttribute("data-k");if(sc===k)sd*=-1;else{sc=k;sd=1}r()});
+let tb="";data.forEach(row=>{tb+="<tr>"+cols.map(c=>"<td>"+row[c.k]+"</td>").join("")+"</tr>"});
+document.querySelector("#"+id+" tbody").innerHTML=tb;
+}
+r();
+}
+</script>
+</body>
+</html>

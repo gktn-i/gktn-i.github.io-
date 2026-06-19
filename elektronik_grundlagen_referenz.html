@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elektronik 101 — Hobby-Referenz</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1a1a;background:#fff;padding:1.5rem;max-width:1200px;margin:0 auto}
+@media(prefers-color-scheme:dark){body{background:#1a1a1a;color:#e0e0e0}}
+h1{font-size:21px;font-weight:600;margin-bottom:.3rem}
+.sub{font-size:12.5px;color:#888;margin-bottom:1.2rem}
+h2{font-size:16px;font-weight:600;margin:1.6rem 0 .7rem;padding-bottom:4px;border-bottom:1px solid #ddd}
+h3{font-size:13.5px;font-weight:600;margin:1.1rem 0 .5rem;color:#0C447C}
+@media(prefers-color-scheme:dark){h2{border-bottom-color:#444}h3{color:#B5D4F4}}
+p{font-size:13px;line-height:1.65;margin-bottom:.6rem}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.2rem;position:sticky;top:0;background:#fff;padding:8px 0;z-index:10}
+@media(prefers-color-scheme:dark){.tabs{background:#1a1a1a}}
+.tabs button{font-size:13px;padding:7px 14px;cursor:pointer;background:transparent;border:1px solid #ccc;border-radius:8px;color:#666;transition:all .15s;font-weight:500}
+.tabs button.active{background:#E6F1FB;color:#0C447C;border-color:#85B7EB}
+.tabs button:hover{background:#f5f5f5}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem}
+.controls button{font-size:12px;padding:4px 10px;cursor:pointer;background:transparent;border:1px solid #ccc;border-radius:8px;color:#666;transition:all .15s}
+.controls button.active{background:#E6F1FB;color:#0C447C;border-color:#85B7EB}
+.controls button:hover{background:#f5f5f5}
+.search{padding:6px 10px;font-size:13px;border:1px solid #ddd;border-radius:8px;background:#fff;color:#1a1a1a;width:260px;margin-bottom:.5rem}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px}
+th{text-align:left;padding:8px 6px;font-weight:500;font-size:11.5px;color:#888;border-bottom:1px solid #ccc;cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:#1a1a1a}
+th .ar{font-size:10px;margin-left:2px}
+td{padding:8px 6px;border-bottom:1px solid #eee;vertical-align:top;line-height:1.5}
+tr:hover td{background:#f9f9f9}
+.cb{display:inline-block;font-size:11px;padding:2px 7px;border-radius:8px;font-weight:500;white-space:nowrap}
+.cat-passiv .cb{background:#E6F1FB;color:#0C447C}
+.cat-halbleiter .cb{background:#EEEDFE;color:#3C3489}
+.cat-ic .cb{background:#FCEBEB;color:#791F1F}
+.cat-mech .cb{background:#E1F5EE;color:#085041}
+.cat-power .cb{background:#FAEEDA;color:#633806}
+.cat-schutz .cb{background:#FAECE7;color:#712B13}
+.cat-modul .cb{background:#F1EFE8;color:#444441}
+.count{font-size:12px;color:#888;margin-bottom:8px}
+.dr td{padding:12px 10px;background:#f5f5f3;font-size:12.5px;line-height:1.7}
+.dr b{color:#0C447C}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.tag{font-size:11px;padding:2px 7px;border-radius:8px;background:#e8e8e5;color:#666}
+.tag.warn{background:#FAECE7;color:#712B13}
+.card{border:1px solid #e2e2e2;border-radius:10px;padding:14px 16px;margin-bottom:10px;background:#fafafa}
+.card h3{margin-top:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.formula{font-family:'SF Mono',Menlo,Consolas,monospace;background:#eef3f8;padding:3px 8px;border-radius:6px;font-size:13px;color:#0C447C;display:inline-block;margin:2px 0}
+ul{margin:.3rem 0 .6rem 1.1rem}
+li{font-size:13px;line-height:1.6;margin-bottom:3px}
+li.warn{color:#791F1F}
+.lvl{display:inline-block;font-size:11px;padding:2px 8px;border-radius:8px;font-weight:600;white-space:nowrap}
+.lvl-ok{background:#E1F5EE;color:#085041}
+.lvl-warn{background:#FAEEDA;color:#633806}
+.lvl-bad{background:#FAECE7;color:#791F1F}
+.lvl-crit{background:#791F1F;color:#fff}
+.danger-box{border:1px solid #E0A9A9;border-left:4px solid #B0281A;border-radius:10px;padding:12px 16px;margin-bottom:10px;background:#FCF2F0}
+.rate{display:flex;align-items:center;gap:6px;min-width:62px}
+.rate-bar{flex:1;height:6px;border-radius:3px;background:#e2e2e2;overflow:hidden;min-width:34px}
+.rate-fill{height:100%;border-radius:3px;background:#2F73BC}
+.rate-num{font-size:11px;color:#888;width:14px;text-align:right;flex-shrink:0}
+.rule{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #eee;font-size:13px;line-height:1.55}
+.rule:last-child{border-bottom:none}
+.rule .ico{font-size:15px;flex-shrink:0;width:22px;text-align:center}
+.kbd{font-family:'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;background:#e8e8e8;padding:1px 6px;border-radius:5px}
+.calc{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin:.6rem 0}
+.calc label{font-size:11.5px;color:#888;display:block;margin-bottom:3px}
+.calc input,.calc select{padding:6px 9px;font-size:13px;border:1px solid #ddd;border-radius:7px;background:#fff;color:#1a1a1a;width:120px}
+.calc-out{font-size:14px;font-weight:600;padding:8px 14px;border-radius:8px;background:#E6F1FB;color:#0C447C;margin-top:8px;display:inline-block}
+.colorband{display:inline-block;width:14px;height:22px;border-radius:3px;border:1px solid rgba(0,0,0,.25);margin:0 1px;vertical-align:middle}
+.hidden{display:none}
+.note{font-size:12px;color:#888;font-style:italic;margin-top:4px}
+.big-out{font-size:18px;font-weight:700;color:#0C447C;margin-top:10px}
+@media(prefers-color-scheme:dark){
+.sub,.count,.note{color:#999}
+.tabs button,.controls button{border-color:#555;color:#aaa}
+.tabs button:hover,.controls button:hover{background:#333}
+.tabs button.active,.controls button.active{background:#042C53;color:#B5D4F4;border-color:#185FA5}
+.search,.calc input,.calc select{background:#2a2a2a;border-color:#444;color:#e0e0e0}
+th{color:#999;border-bottom-color:#444}
+th:hover{color:#e0e0e0}
+td{border-bottom-color:#333}
+tr:hover td{background:#252525}
+.dr td{background:#252525}
+.dr b{color:#B5D4F4}
+.tag{background:#333;color:#aaa}
+.tag.warn{background:#4A1B0C;color:#F5C4B3}
+li.warn{color:#F5C4B3}
+.lvl-ok{background:#04342C;color:#9FE1CB}
+.lvl-warn{background:#412402;color:#FAC775}
+.lvl-bad{background:#4A1B0C;color:#F5C4B3}
+.lvl-crit{background:#B0281A;color:#fff}
+.danger-box{background:#2A1512;border-color:#6B2418;border-left-color:#D14836}
+.rate-bar{background:#3a3a3a}
+.rate-fill{background:#5B9BD8}
+.card{background:#222;border-color:#3a3a3a}
+.formula{background:#042C53;color:#B5D4F4}
+.calc-out,.big-out{background:#042C53;color:#B5D4F4}
+.kbd{background:#333;color:#ccc}
+.rule{border-bottom-color:#333}
+.cat-passiv .cb{background:#042C53;color:#B5D4F4}
+.cat-halbleiter .cb{background:#26215C;color:#CECBF6}
+.cat-ic .cb{background:#501313;color:#F7C1C1}
+.cat-mech .cb{background:#04342C;color:#9FE1CB}
+.cat-power .cb{background:#412402;color:#FAC775}
+.cat-schutz .cb{background:#4A1B0C;color:#F5C4B3}
+.cat-modul .cb{background:#2C2C2A;color:#D3D1C7}
+}
+</style>
+</head>
+<body>
+<h1>Elektronik 101 — Hobby-Referenz</h1>
+<div class="sub">Nachschlagewerk für Feinelektronik & Bastelprojekte · Grundlagen, Bauteile, Regeln, Standard-Abläufe</div>
+
+<div class="tabs" id="tabs"></div>
+
+<!-- ============ TAB 1: GRUNDLAGEN ============ -->
+<section id="t-grundlagen">
+
+<h2>Die 4 Kerngrößen — das musst du verinnerlichen</h2>
+<div class="grid2">
+<div class="card"><h3>Spannung (U) — Volt (V)</h3>
+<p>Der "Druck", der die Ladung durch den Draht schiebt. Vergleich: Wasserdruck im Schlauch. Misst man immer <b>zwischen zwei Punkten</b> (parallel zum Bauteil).</p></div>
+<div class="card"><h3>Strom (I) — Ampere (A)</h3>
+<p>Die Menge Ladung, die pro Sekunde fließt. Vergleich: wie viel Wasser durch den Schlauch läuft. Misst man <b>im Stromfluss</b> (Bauteil auftrennen, Messgerät dazwischen).</p></div>
+<div class="card"><h3>Widerstand (R) — Ohm (Ω)</h3>
+<p>Wie stark ein Bauteil den Strom bremst. Vergleich: enge Stelle im Schlauch. Mehr Widerstand = weniger Strom bei gleicher Spannung.</p></div>
+<div class="card"><h3>Leistung (P) — Watt (W)</h3>
+<p>Wie viel Energie pro Sekunde umgesetzt wird. Bei Bauteilen heißt das: wie viel Wärme entsteht. Zu viel Watt = das Bauteil wird heiß und stirbt.</p></div>
+</div>
+
+<h2>Die wichtigsten Formeln</h2>
+<div class="card">
+<h3>Ohmsches Gesetz (das Fundament)</h3>
+<p><span class="formula">U = R × I</span> &nbsp; → &nbsp; <span class="formula">I = U / R</span> &nbsp; → &nbsp; <span class="formula">R = U / I</span></p>
+<p class="note">Eselsbrücke: das "URI"-Dreieck. Deck eine Größe ab, die anderen zwei zeigen die Rechnung.</p>
+<h3>Leistung</h3>
+<p><span class="formula">P = U × I</span> &nbsp; und kombiniert: &nbsp; <span class="formula">P = I² × R</span> &nbsp; oder &nbsp; <span class="formula">P = U² / R</span></p>
+<h3>Reihenschaltung (hintereinander)</h3>
+<p>Widerstände addieren sich: <span class="formula">R = R1 + R2 + …</span> · Strom überall gleich · Spannung teilt sich auf.</p>
+<h3>Parallelschaltung (nebeneinander)</h3>
+<p>Kehrwerte addieren: <span class="formula">1/R = 1/R1 + 1/R2 + …</span> · Spannung überall gleich · Strom teilt sich auf. Gesamtwiderstand ist <b>kleiner</b> als der kleinste Einzelwiderstand.</p>
+</div>
+
+<h2>Begriffe einfach erklärt (Glossar)</h2>
+<div class="grid2">
+<div class="card"><h3>GND / Masse</h3><p>Der gemeinsame Bezugspunkt (0 Volt), auf den sich alle Spannungen beziehen. Alle Minuspole und Masseleitungen werden zusammengeschaltet ("gemeinsame Masse").</p></div>
+<div class="card"><h3>DC / Gleichstrom</h3><p>Strom fließt immer in eine Richtung (Batterie, USB, Netzteil). Hat festes Plus und Minus.</p></div>
+<div class="card"><h3>AC / Wechselstrom</h3><p>Strom wechselt ständig die Richtung (Steckdose, 230 V). In Hobby-Projekten meist nur als Eingang fürs Netzteil relevant.</p></div>
+<div class="card"><h3>Frequenz — Hertz (Hz)</h3><p>Wie oft pro Sekunde etwas schwingt/sich wiederholt. 1 Hz = einmal pro Sekunde. Wichtig bei Takt, Signalen, Tönen.</p></div>
+<div class="card"><h3>Kurzschluss</h3><p>Plus und Minus direkt verbunden, ohne Bauteil dazwischen. Strom wird sehr groß → Hitze, Rauch, kaputtes Netzteil. Immer vermeiden.</p></div>
+<div class="card"><h3>Polarität</h3><p>Manche Bauteile haben Plus und Minus und müssen richtig herum eingebaut werden (LED, Elko, Diode, Akku). Falsch herum = Funktion weg oder Bauteil kaputt.</p></div>
+<div class="card"><h3>Logikpegel (HIGH / LOW)</h3><p>Digitale Bauteile kennen nur zwei Zustände: HIGH (Spannung da, meist 3,3 V oder 5 V) = "1", LOW (0 V) = "0".</p></div>
+<div class="card"><h3>Pull-up / Pull-down</h3><p>Ein Widerstand, der einen Eingang auf einen festen Pegel zieht, wenn nichts anderes anliegt. Verhindert "flatternde", undefinierte Eingänge. Pull-up zieht auf HIGH, Pull-down auf LOW.</p></div>
+<div class="card"><h3>Entkopplungs-Kondensator</h3><p>Kleiner Kondensator (oft 100 nF) direkt neben jedem IC. Glättet kurze Spannungseinbrüche und stabilisiert die Versorgung. Faustregel: einen pro Chip.</p></div>
+<div class="card"><h3>Spannungsteiler</h3><p>Zwei Widerstände in Reihe greifen in der Mitte eine kleinere Spannung ab. Standard-Trick, um z. B. 5 V auf einen 3,3 V messbaren Wert zu bringen.</p></div>
+<div class="card"><h3>PWM (Pulsweiten-Modulation)</h3><p>Schnelles An/Aus-Schalten, um Helligkeit (LED) oder Drehzahl (Motor) zu steuern. Längeres "An" = mehr Leistung. Spart Wärme gegenüber Widerstand.</p></div>
+<div class="card"><h3>Datenblatt</h3><p>Das offizielle Dokument zum Bauteil (Hersteller-PDF). Enthält Grenzwerte, Pin-Belegung und Beispielschaltungen. Im Zweifel immer dort nachsehen.</p></div>
+<div class="card"><h3>Kapazität — Farad (F)</h3><p>Wie viel Ladung ein Kondensator speichern kann. In der Praxis winzig: µF (Mikro), nF (Nano), pF (Piko).</p></div>
+<div class="card"><h3>Induktivität — Henry (H)</h3><p>Eigenschaft einer Spule: sie wehrt sich gegen Stromänderungen. In der Praxis mH oder µH. Wichtig in Wandlern, Filtern, Funk.</p></div>
+</div>
+
+<h2>Einheiten-Vorsätze (Größenordnungen)</h2>
+<div class="tbl-wrap"><table style="min-width:520px">
+<thead><tr><th>Vorsatz</th><th>Zeichen</th><th>Faktor</th><th>Typisch bei</th></tr></thead>
+<tbody>
+<tr><td>Mega</td><td>M</td><td>1 000 000</td><td>Ω (Widerstände), Hz (Takt)</td></tr>
+<tr><td>Kilo</td><td>k</td><td>1 000</td><td>Ω (Widerstände), Hz</td></tr>
+<tr><td>—</td><td>—</td><td>1</td><td>V, A, Ω</td></tr>
+<tr><td>Milli</td><td>m</td><td>0,001</td><td>A (Strom), V, H</td></tr>
+<tr><td>Mikro</td><td>µ</td><td>0,000001</td><td>F (Elkos), A, H</td></tr>
+<tr><td>Nano</td><td>n</td><td>0,000000001</td><td>F (Keramik-Kondensatoren)</td></tr>
+<tr><td>Piko</td><td>p</td><td>0,000000000001</td><td>F (sehr kleine Kondensatoren)</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<!-- ============ TAB 2: KOMPONENTEN ============ -->
+<section id="t-komponenten" class="hidden">
+<input class="search" type="text" placeholder="Bauteil oder Anwendung suchen..." id="q">
+<div class="controls" id="cats"></div>
+<div class="count" id="count"></div>
+<div class="tbl-wrap"><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+<p class="note">Zeile anklicken für Details: Kennwerte, Kompatibilität, Polarität und worauf du achten musst.</p>
+</section>
+
+<!-- ============ TAB 3: REGELN & PRAXIS ============ -->
+<section id="t-regeln" class="hidden">
+
+<h2>Goldene Regeln — immer beachten</h2>
+<div class="card">
+<div class="rule"><span class="ico">💡</span><div><b>LED nie ohne Vorwiderstand.</b> Eine LED begrenzt ihren Strom nicht selbst. Ohne Widerstand zieht sie zu viel und brennt durch. (Rechner im Tab "Rechner".)</div></div>
+<div class="rule"><span class="ico">🔌</span><div><b>Polarität prüfen, bevor du Strom gibst.</b> Elko, LED, Diode, Akku, Modul-Versorgung: falsch herum kann sofort zerstören.</div></div>
+<div class="rule"><span class="ico">⚡</span><div><b>3,3 V und 5 V nicht blind mischen.</b> 5 V an einen 3,3-V-Eingang (z. B. ESP32) kann den Pin zerstören. Pegelwandler oder Spannungsteiler nutzen.</div></div>
+<div class="rule"><span class="ico">🔥</span><div><b>Leistung/Strombelastbarkeit im Blick.</b> Jeder Widerstand, jede Leiterbahn, jeder Regler hat ein Limit. Heiße Bauteile = zu viel Strom.</div></div>
+<div class="rule"><span class="ico">🚫</span><div><b>Nie Plus und Minus direkt verbinden.</b> Kurzschluss. Vor dem Einschalten Verdrahtung kontrollieren.</div></div>
+<div class="rule"><span class="ico">🔗</span><div><b>Gemeinsame Masse.</b> Sobald mehrere Baugruppen zusammenarbeiten, müssen alle GND/Minus verbunden sein, sonst funktionieren Signale nicht.</div></div>
+<div class="rule"><span class="ico">⚙️</span><div><b>Motor/Relais/Spule braucht Freilaufdiode.</b> Beim Abschalten erzeugt eine Spule eine Spannungsspitze, die Transistoren killt. Diode parallel schützt.</div></div>
+<div class="rule"><span class="ico">🧲</span><div><b>ESD beachten (statische Aufladung).</b> Empfindliche Chips (MOSFET, Mikrocontroller) vorher entladen: kurz geerdetes Metall anfassen.</div></div>
+<div class="rule"><span class="ico">📄</span><div><b>Im Zweifel ins Datenblatt.</b> Grenzwerte ("Absolute Maximum Ratings") nie überschreiten.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Li-Ion / LiPo mit Respekt.</b> Nie tiefentladen, nie über 4,2 V/Zelle laden, nie mechanisch beschädigen. Schutzschaltung (BMS) verwenden.</div></div>
+</div>
+
+<h2>Standard-Vorgänge</h2>
+
+<h3>Mit dem Multimeter messen</h3>
+<div class="card">
+<ul>
+<li><b>Spannung (V):</b> Messgerät auf V (DC = gerade Linie). Spitzen <b>parallel</b> ans Bauteil, Schaltung bleibt an. Rot an Plus, Schwarz an Masse.</li>
+<li><b>Durchgang/Verbindung:</b> Piep-Symbol. Schaltung <b>aus</b>. Piept = Leitung verbunden. Schneller Check auf Kabelbruch oder Kurzschluss.</li>
+<li><b>Widerstand (Ω):</b> Ω-Symbol. Bauteil <b>ausgebaut</b> oder stromlos messen, sonst falsche Werte.</li>
+<li><b>Strom (A):</b> Schwarze Leitung bleibt, rote in die A-Buchse. Schaltung <b>auftrennen</b>, Messgerät in Reihe einschleifen. Achtung: falscher Bereich = Sicherung im Messgerät durch.</li>
+</ul>
+<p class="note">Reihenfolge merken: Spannung misst man nebendran, Strom misst man mittendrin.</p>
+</div>
+
+<h3>Löten — die Basics</h3>
+<div class="card">
+<ul>
+<li><b>Temperatur:</b> bleihaltiges Lot ca. 320–340 °C, bleifrei ca. 350–370 °C.</li>
+<li><b>Reihenfolge:</b> erst die <b>Lötstelle</b> mit der Spitze erwärmen, dann den Draht (Lot) an die Stelle führen, nicht an die Spitze. Lot fließt zur Wärme.</li>
+<li><b>Gute Lötstelle:</b> glänzend, glatt, kegelförmig. Matt/kugelig = "kalte" Lötstelle, neu machen.</li>
+<li><b>Flussmittel</b> entfernt Oxid und lässt Lot sauber fließen. Bei SMD fast Pflicht.</li>
+<li><b>THT</b> = Bauteile mit Drahtbeinchen durch Löcher (einfach). <b>SMD</b> = winzige Bauteile auf der Oberfläche (fein, braucht Übung, Lupe/Pinzette).</li>
+<li><b>Entlöten:</b> Entlötlitze (saugt Lot auf) oder Entlötpumpe.</li>
+</ul>
+</div>
+
+<h3>Steckbrett (Breadboard) nutzen</h3>
+<div class="card">
+<ul>
+<li>Die langen Schienen am Rand (oft rot/blau) sind durchgehend: für Plus und Masse.</li>
+<li>In der Mitte sind die Reihen jeweils <b>5er-Gruppen senkrecht</b> verbunden, getrennt durch die Mittelrille.</li>
+<li>ICs werden mittig über die Rille gesteckt, damit beide Beinchenreihen getrennt sind.</li>
+<li>Nur für Prototypen/Tests, nicht für dauerhafte oder hohe Ströme.</li>
+</ul>
+</div>
+
+<h2>Good to know — Praxis-Wissen</h2>
+<div class="card">
+<div class="rule"><span class="ico">🎨</span><div><b>Widerstands-Farbcode</b> liest man von der Seite, wo die Ringe näher am Rand sitzen. (Decoder im Tab "Rechner".)</div></div>
+<div class="rule"><span class="ico">🔢</span><div><b>SMD-Beschriftung:</b> "103" heißt 10 + 3 Nullen = 10 000 Ω = 10 kΩ. Gleiches Prinzip oft bei Kondensatoren in pF.</div></div>
+<div class="rule"><span class="ico">📐</span><div><b>E-Reihen:</b> Widerstände gibt es nur in genormten Stufen (E12: 10, 12, 15, 18, 22…). Krumme Wunschwerte gibt es selten, nächsten Normwert nehmen.</div></div>
+<div class="rule"><span class="ico">🟦</span><div><b>Transistor als Schalter:</b> kleiner Strom (Basis/Gate) schaltet großen Strom. Standard, um mit einem Mikrocontroller-Pin Motor/LED-Streifen/Relais zu schalten.</div></div>
+<div class="rule"><span class="ico">🔧</span><div><b>MOSFET vs. Bipolartransistor:</b> MOSFET wird über Spannung (Gate) gesteuert und ist verlustärmer für hohe Ströme. Bipolar über Strom (Basis), gut für kleine Signale.</div></div>
+<div class="rule"><span class="ico">📉</span><div><b>Linearregler (7805) verheizt die Differenz</b> als Wärme: 12 V → 5 V bei 1 A = 7 W Hitze. Bei großem Abstand lieber Schaltregler (Buck) nehmen.</div></div>
+<div class="rule"><span class="ico">🧮</span><div><b>Kondensator glättet, Spule filtert.</b> Großer Elko am Reglereingang/-ausgang stabilisiert die Versorgung. 100 nF Keramik neben jedem IC.</div></div>
+</div>
+</section>
+
+<!-- ============ TAB 4: RECHNER ============ -->
+<section id="t-rechner" class="hidden">
+
+<h2>LED-Vorwiderstand berechnen</h2>
+<div class="card">
+<p class="note">Formel: R = (Versorgung − LED-Spannung) / LED-Strom. Typisch: rote LED ~2,0 V, weiß/blau ~3,2 V, Strom 10–20 mA.</p>
+<div class="calc">
+<div><label>Versorgung (V)</label><input type="number" id="led-vs" value="5" step="0.1"></div>
+<div><label>LED-Spannung (V)</label><input type="number" id="led-vf" value="2.0" step="0.1"></div>
+<div><label>LED-Strom (mA)</label><input type="number" id="led-i" value="15" step="1"></div>
+</div>
+<div class="big-out" id="led-out"></div>
+<p class="note" id="led-note"></p>
+</div>
+
+<h2>Ohmsches Gesetz — was du kennst, fülle ich aus</h2>
+<div class="card">
+<p class="note">Trage zwei Werte ein, leer lassen was du suchst.</p>
+<div class="calc">
+<div><label>Spannung U (V)</label><input type="number" id="ohm-u" step="any"></div>
+<div><label>Strom I (A)</label><input type="number" id="ohm-i" step="any"></div>
+<div><label>Widerstand R (Ω)</label><input type="number" id="ohm-r" step="any"></div>
+</div>
+<button class="controls" style="padding:6px 14px;font-size:13px;border:1px solid #85B7EB;border-radius:8px;background:#E6F1FB;color:#0C447C;cursor:pointer" onclick="calcOhm()">Berechnen</button>
+<div class="big-out" id="ohm-out"></div>
+</div>
+
+<h2>Widerstands-Farbcode (4 Ringe)</h2>
+<div class="card">
+<div class="calc">
+<div><label>Ring 1</label><select id="b1"></select></div>
+<div><label>Ring 2</label><select id="b2"></select></div>
+<div><label>Multiplikator</label><select id="b3"></select></div>
+<div><label>Toleranz</label><select id="b4"></select></div>
+</div>
+<div style="margin:10px 0">
+<span class="colorband" id="cb1"></span><span class="colorband" id="cb2"></span><span class="colorband" id="cb3"></span><span style="display:inline-block;width:8px"></span><span class="colorband" id="cb4"></span>
+</div>
+<div class="big-out" id="band-out"></div>
+</div>
+
+<h2>Spannungsteiler</h2>
+<div class="card">
+<p class="note">Ausgang = Eingang × R2 / (R1 + R2). R2 ist der untere Widerstand (zur Masse).</p>
+<div class="calc">
+<div><label>Eingang (V)</label><input type="number" id="vt-in" value="5" step="0.1"></div>
+<div><label>R1 oben (Ω)</label><input type="number" id="vt-r1" value="1000" step="any"></div>
+<div><label>R2 unten (Ω)</label><input type="number" id="vt-r2" value="2000" step="any"></div>
+</div>
+<div class="big-out" id="vt-out"></div>
+</div>
+</section>
+
+<!-- ============ TAB: MESSGERÄT ============ -->
+<section id="t-messgeraet" class="hidden">
+
+<h2>Aufbau eines Multimeters</h2>
+<p>Egal welches Gerät, der Aufbau ist fast immer gleich. Vier Teile musst du kennen:</p>
+<div class="grid2">
+<div class="card"><h3>1. Display</h3><p>Zeigt den Messwert und kleine Symbole an (welche Einheit, welcher Modus, schwache Batterie). Steht <b>OL</b> da, ist der Wert zu groß für den Bereich oder es gibt keine Verbindung.</p></div>
+<div class="card"><h3>2. Drehrad (Funktionswähler)</h3><p>Hier stellst du ein, <b>was</b> du messen willst: Spannung, Strom, Widerstand usw. Immer zuerst die richtige Funktion wählen, dann erst die Spitzen anlegen.</p></div>
+<div class="card"><h3>3. Buchsen (Anschlüsse)</h3><p>Meist drei Stück. Die schwarze Leitung steckt fast immer fest in <b>COM</b>. Die rote Leitung wechselt je nach Messung die Buchse (siehe unten).</p></div>
+<div class="card"><h3>4. Messleitungen / Prüfspitzen</h3><p><b>Rot = Plus</b>, <b>Schwarz = Minus/COM</b>. Du fasst nur den isolierten Griff an, nie die blanke Metallspitze bei Spannung.</p></div>
+</div>
+
+<h2>Die Buchsen richtig stecken</h2>
+<div class="card">
+<div class="rule"><span class="ico">⚫</span><div><b>COM</b> — hier steckt die <b>schwarze</b> Leitung. Immer. Egal was du misst. "COM" steht für den gemeinsamen Minus-Bezugspunkt.</div></div>
+<div class="rule"><span class="ico">🔴</span><div><b>VΩ / VΩmA</b> (oft beschriftet mit V, Ω, Hz, Symbolen) — hier steckt die <b>rote</b> Leitung für fast alles: Spannung, Widerstand, Durchgang, Diode, Kondensator, kleine Ströme.</div></div>
+<div class="rule"><span class="ico">⚠️</span><div><b>10A / 20A</b> — eigene Buchse nur für <b>große Ströme</b>. Rote Leitung hier rein, wenn du Strom über ~0,2 A misst. Achtung: oft ohne Sicherung → Fehler killt das Gerät.</div></div>
+</div>
+
+<h2>Symbole am Drehrad — was bedeutet was</h2>
+<div class="tbl-wrap"><table style="min-width:640px">
+<thead><tr><th>Symbol / Beschriftung</th><th>Bedeutung</th><th>Wofür du es brauchst</th></tr></thead>
+<tbody>
+<tr><td><b>V</b> mit gerader + gestrichelter Linie (⎓) · oft <b>DCV</b></td><td>Gleichspannung</td><td>Batterien, Netzteile, USB, alles in Schaltungen. <b>Der häufigste Modus.</b></td></tr>
+<tr><td><b>V~</b> · oft <b>ACV</b></td><td>Wechselspannung</td><td>Steckdose, Trafo-Ausgang. Im Hobby selten, mit Netzspannung nur mit Erfahrung.</td></tr>
+<tr><td><b>A⎓</b> / <b>mA</b> / <b>µA</b></td><td>Gleichstrom</td><td>Wie viel Strom eine Schaltung zieht. Spitzen werden in Reihe eingeschleift.</td></tr>
+<tr><td><b>A~</b></td><td>Wechselstrom</td><td>Selten im Hobby-Bereich.</td></tr>
+<tr><td><b>Ω</b></td><td>Widerstand</td><td>Widerstandswert messen, prüfen ob ein Bauteil noch heil ist. Nur stromlos!</td></tr>
+<tr><td>Schallwellen-Symbol ))) oder 🔊</td><td>Durchgangsprüfung</td><td>Piept, wenn zwei Punkte verbunden sind. Schneller Test auf Kabelbruch / Kurzschluss.</td></tr>
+<tr><td>Dioden-Pfeil ▷⊢</td><td>Diodentest</td><td>Prüfen, ob Diode/LED heil ist und richtig herum. Zeigt die Durchlassspannung.</td></tr>
+<tr><td>Kondensator-Symbol ⊣⊢ · oft <b>CAP / F</b></td><td>Kapazität</td><td>Wert eines Kondensators messen (in µF/nF). Nicht jedes Gerät kann das.</td></tr>
+<tr><td><b>Hz</b> / <b>%</b></td><td>Frequenz</td><td>Wie oft ein Signal pro Sekunde schwingt (Takt, PWM).</td></tr>
+<tr><td><b>°C</b> / <b>TEMP</b></td><td>Temperatur</td><td>Mit Fühler (Thermoelement). Nur manche Geräte.</td></tr>
+<tr><td><b>hFE</b></td><td>Transistor-Test</td><td>Verstärkungsfaktor eines Transistors. Eher bei älteren Geräten.</td></tr>
+<tr><td><b>NCV</b></td><td>Berührungslose Spannung</td><td>Hält man neben ein Kabel; leuchtet/piept bei Netzspannung. Nur grobe Warnung, kein Messwert.</td></tr>
+</tbody>
+</table></div>
+<p class="note">Die gestrichelte/gerade Linie (⎓) steht überall für Gleich (DC), die Wellenlinie (~) für Wechsel (AC).</p>
+
+<h2>Die Tasten (Settings) verstehen</h2>
+<div class="card">
+<div class="rule"><span class="ico">🔄</span><div><b>RANGE</b> — wechselt den Messbereich von Hand. Brauchst du nur bei Geräten <b>ohne</b> Auto-Range (siehe unten).</div></div>
+<div class="rule"><span class="ico">📌</span><div><b>HOLD</b> — friert den aktuellen Wert auf dem Display ein. Praktisch, wenn du an einer schlecht einsehbaren Stelle misst.</div></div>
+<div class="rule"><span class="ico">0️⃣</span><div><b>REL / ZERO / Δ</b> — setzt den aktuellen Wert als neuen Nullpunkt. Nützlich, um den Eigenwiderstand der Messleitungen abzuziehen (erst Spitzen zusammenhalten, dann REL drücken).</div></div>
+<div class="rule"><span class="ico">🔀</span><div><b>SELECT / MODE / FUNC</b> — schaltet zwischen mehreren Funktionen auf derselben Drehrad-Stellung um (z. B. Ω ↔ Durchgang ↔ Diode).</div></div>
+<div class="rule"><span class="ico">📈</span><div><b>MAX / MIN</b> — merkt sich den höchsten/niedrigsten Wert während der Messung.</div></div>
+<div class="rule"><span class="ico">💡</span><div><b>Backlight</b> — Display-Beleuchtung. Schaltet sich oft nach kurzer Zeit selbst aus, um Batterie zu sparen.</div></div>
+</div>
+
+<h2>Auto-Range vs. manueller Bereich</h2>
+<div class="grid2">
+<div class="card"><h3>Auto-Range (automatisch)</h3><p>Das Gerät sucht den passenden Bereich selbst. Du wählst nur die Funktion (z. B. V⎓) und misst. <b>Einsteigerfreundlich.</b> Nachteil: braucht eine knappe Sekunde, bis sich der Wert "einpendelt".</p></div>
+<div class="card"><h3>Manueller Bereich</h3><p>Du wählst die Stufe selbst (z. B. 2 V, 20 V, 200 V). <b>Regel:</b> immer die nächsthöhere Stufe über dem erwarteten Wert. Eine 9-V-Batterie misst du im 20-V-Bereich, nicht im 2-V-Bereich (sonst zeigt es nur <b>OL</b>).</p></div>
+</div>
+
+<h2>Display-Anzeigen lesen</h2>
+<div class="card">
+<div class="rule"><span class="ico">🔠</span><div><b>OL</b> (oder <b>1</b> ganz links) — "Over Limit". Bei Spannung/Widerstand: Wert zu groß für den Bereich. Bei Durchgang/Widerstand: <b>keine Verbindung</b> (unendlich).</div></div>
+<div class="rule"><span class="ico">➖</span><div><b>Minus-Zeichen</b> vor der Zahl — du hast rote und schwarze Spitze vertauscht. Der Wert stimmt trotzdem, nur die Polung ist umgekehrt.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Batterie-Symbol</b> — die Batterie <b>im Messgerät</b> ist schwach. Werte werden dann ungenau.</div></div>
+<div class="rule"><span class="ico">🔢</span><div>Einheiten-Buchstabe beachten: <b>m</b> (Milli), <b>k</b> (Kilo), <b>M</b> (Mega), <b>µ</b> (Mikro). "4.7k Ω" sind 4700 Ω.</div></div>
+</div>
+
+<h2>Schritt für Schritt — die wichtigsten Messungen</h2>
+
+<h3>① Gleichspannung messen (Batterie, Netzteil, Schaltung)</h3>
+<div class="card"><ul>
+<li>Schwarz in <b>COM</b>, Rot in <b>VΩ</b>.</li>
+<li>Drehrad auf <b>V⎓ / DCV</b> (bei manuell: einen Bereich über dem erwarteten Wert).</li>
+<li>Schaltung darf <b>an</b> bleiben. Spitzen <b>parallel</b> anlegen: Rot an Plus, Schwarz an Masse.</li>
+<li>Wert ablesen. Minus-Zeichen = Spitzen vertauscht, sonst egal.</li>
+</ul></div>
+
+<h3>② Durchgang prüfen (Verbindung / Kabelbruch)</h3>
+<div class="card"><ul>
+<li>Schwarz in <b>COM</b>, Rot in <b>VΩ</b>. Drehrad auf das ))) -Symbol.</li>
+<li>Schaltung <b>stromlos</b> machen (ausschalten / Strom trennen).</li>
+<li>Spitzen an die zwei Punkte. <b>Piepton</b> = verbunden. Kein Ton / OL = unterbrochen.</li>
+<li>Kurzer Test zu Beginn: beide Spitzen zusammenhalten → muss piepen (Funktionscheck).</li>
+</ul></div>
+
+<h3>③ Widerstand messen (Ω)</h3>
+<div class="card"><ul>
+<li>Schwarz in <b>COM</b>, Rot in <b>VΩ</b>. Drehrad auf <b>Ω</b>.</li>
+<li>Bauteil <b>stromlos</b> und am besten <b>einseitig ausgelötet</b> messen, sonst messen umliegende Bauteile mit und der Wert stimmt nicht.</li>
+<li>OL = Widerstand zu groß für den Bereich oder unterbrochen.</li>
+</ul></div>
+
+<h3>④ Strom messen (mit Vorsicht!)</h3>
+<div class="card"><ul>
+<li>Rot in die <b>mA</b>- oder <b>10A</b>-Buchse stecken (je nach erwartetem Strom), Schwarz bleibt in COM.</li>
+<li>Drehrad auf <b>A⎓ / mA</b>.</li>
+<li>Den Stromkreis <b>auftrennen</b> und das Messgerät <b>in Reihe dazwischen</b> hängen — der Strom muss durch das Gerät fließen.</li>
+<li class="warn"><b>Nie</b> die Spitzen in dieser Stellung einfach an Plus und Minus halten → das ist ein Kurzschluss durch das Gerät, die Sicherung fliegt (oder das Gerät stirbt).</li>
+</ul></div>
+
+<h3>⑤ Diode / LED prüfen</h3>
+<div class="card"><ul>
+<li>Schwarz in COM, Rot in VΩ, Drehrad auf das Dioden-Symbol ▷⊢.</li>
+<li>Rot an Anode (Plus), Schwarz an Kathode (Ring/Minus): zeigt die Durchlassspannung (z. B. 0,6 V bei Diode, ~1,8 V bei roter LED, LED leuchtet schwach).</li>
+<li>Spitzen umdrehen: muss <b>OL</b> zeigen. Zeigt es in beide Richtungen 0 oder OL → Diode defekt.</li>
+</ul></div>
+
+<h3>⑥ Kondensator messen (Kapazität)</h3>
+<div class="card"><ul>
+<li>Kondensator <b>vorher entladen</b> (kurz beide Beinchen über einen Widerstand verbinden), sonst kann die Restladung das Gerät stören.</li>
+<li>Drehrad auf das Kondensator-Symbol ⊣⊢ / CAP. Spitzen anlegen (bei Elko Polung beachten).</li>
+<li>Wert in µF/nF ablesen und mit Aufdruck vergleichen.</li>
+</ul></div>
+
+<h3>⑦ Batterie-Schnelltest</h3>
+<div class="card"><ul>
+<li>V⎓, Rot an Plus, Schwarz an Minus. Spannung ablesen.</li>
+<li>Faustwerte: AA/AAA frisch ~1,5 V, leer unter ~1,2 V · 9-V-Block frisch ~9 V · Li-Ion-Zelle voll 4,2 V, leer ~3,0 V.</li>
+<li>Besser unter Last messen (im Gerät eingebaut), denn leere Batterien zeigen ohne Last oft noch fast volle Spannung.</li>
+</ul></div>
+
+<h2>Sicherheit & häufige Fehler</h2>
+<div class="card">
+<div class="rule"><span class="ico">🔌</span><div><b>Rote Leitung nach Strommessung zurückstecken!</b> Der häufigste Fehler: Leitung bleibt in der A-Buchse, dann misst man Spannung → Kurzschluss. Nach jeder Strommessung Rot zurück in VΩ.</div></div>
+<div class="rule"><span class="ico">🧰</span><div><b>Erst Funktion wählen, dann anlegen.</b> Nie das Drehrad drehen, während die Spitzen unter Spannung stehen.</div></div>
+<div class="rule"><span class="ico">🚫</span><div><b>Widerstand/Durchgang nur stromlos.</b> An einer Schaltung unter Spannung gemessen → falsche Werte und evtl. Schaden am Gerät.</div></div>
+<div class="rule"><span class="ico">⚡</span><div><b>Netzspannung (230 V) ist kein Anfänger-Spielfeld.</b> Nur mit Gerät der passenden Schutzklasse (CAT II / III), einwandfreien Leitungen und Erfahrung. Im Zweifel Finger weg.</div></div>
+<div class="rule"><span class="ico">🤲</span><div><b>Eine-Hand-Regel</b> bei höheren Spannungen: nur eine Hand benutzen, damit kein Strom über die Brust durch den Körper fließen kann.</div></div>
+<div class="rule"><span class="ico">⏳</span><div><b>Bei Auto-Range Geduld.</b> Den Wert eine Sekunde einpendeln lassen, bevor du abliest.</div></div>
+</div>
+</section>
+
+<!-- ============ TAB: FNIRSI LCR-P1 ============ -->
+<section id="t-lcrp1" class="hidden">
+
+<h2>Was ist der FNIRSI LCR-P1?</h2>
+<p>Ein <b>automatischer Bauteiltester</b>. Der große Unterschied zum Multimeter: Beim Multimeter sagst du dem Gerät, <b>was</b> du messen willst. Beim LCR-P1 steckst du das Bauteil einfach rein, drückst eine Taste, und das Gerät <b>erkennt von selbst</b>, was es ist (Widerstand, Transistor, Diode…), zeigt dir die <b>Pin-Belegung</b> (welches Beinchen was ist) und alle wichtigen Messwerte auf einem kleinen Farbdisplay.</p>
+<p class="note">Ideal zum schnellen Prüfen "ist das Bauteil heil?", zum Sortieren unbekannter Bauteile und zum Aufspüren defekter Kondensatoren. Es ersetzt das Multimeter nicht, es ergänzt es.</p>
+
+<h2>Was er erkennt und anzeigt</h2>
+<div class="tbl-wrap"><table style="min-width:640px">
+<thead><tr><th>Bauteil</th><th>Was angezeigt wird</th></tr></thead>
+<tbody>
+<tr><td><b>Widerstand</b></td><td>Wert in Ω</td></tr>
+<tr><td><b>Kondensator</b></td><td>Kapazität (µF/nF/pF), dazu <b>ESR</b> (Innenwiderstand) und Verlust</td></tr>
+<tr><td><b>Spule / Induktivität</b></td><td>Wert in H/mH, plus Drahtwiderstand</td></tr>
+<tr><td><b>Diode</b></td><td>Durchlassspannung (Vf) und Flussrichtung</td></tr>
+<tr><td><b>Zener-Diode</b></td><td>Zener-Spannung von 0,01 bis 32 V (eigener Messbereich, siehe unten)</td></tr>
+<tr><td><b>LED</b></td><td>Wird als Diode erkannt; zeigt Durchlassspannung, leuchtet beim Test kurz</td></tr>
+<tr><td><b>Transistor (NPN/PNP)</b></td><td>Verstärkung (hFE), Basis-Spannung, automatische Pin-Zuordnung</td></tr>
+<tr><td><b>MOSFET / JFET / IGBT</b></td><td>Gate-Schwellspannung, Gate-Kapazität, eingebaute Schutzdiode</td></tr>
+<tr><td><b>Thyristor / Triac (SCR)</b></td><td>Zündverhalten (Schwelle unter 5 V, Zündstrom unter 6 mA)</td></tr>
+<tr><td><b>Batterie</b></td><td>Spannung (grober Wert, kein vollwertiger Batterietest)</td></tr>
+<tr><td><b>IR-Fernbedienung</b></td><td>Liest den Code im NEC-Format aus (zum Prüfen/Reparieren von Fernbedienungen)</td></tr>
+</tbody>
+</table></div>
+
+<h2>Bedienelemente & Anschlüsse</h2>
+<div class="grid2">
+<div class="card"><h3>Klemmsockel (1-2-3 mit Hebel)</h3><p>Der "ZIF-Sockel": du steckst die Beinchen ohne Kraft in die nummerierten Klemmen 1, 2 und 3 und drückst den Hebel runter. Für bedrahtete Bauteile. Das Gerät sagt dir danach, welche Nummer welcher Anschluss ist.</p></div>
+<div class="card"><h3>Austauschbares Testboard</h3><p>Eine aufsteckbare kleine Platine mit Kontaktflächen für <b>SMD-Bauteile</b> (die winzigen ohne Beinchen) oder wenn der Klemmsockel nicht passt. Mitgeliefert sind außerdem Mess-Haken.</p></div>
+<div class="card"><h3>Zener-Bereich (K-A-A)</h3><p>Ein eigener kleiner Messbereich nur für Zener-Dioden, beschriftet mit K und A (Kathode/Anode). Wird zusammen mit der High-Voltage-Taste benutzt.</p></div>
+<div class="card"><h3>USB-C-Anschluss</h3><p>Zum Laden des eingebauten Akkus (300 mAh, hält erstaunlich lange) und für Daten / Firmware-Updates.</p></div>
+</div>
+
+<h3>Die drei Tasten</h3>
+<div class="card">
+<div class="rule"><span class="ico">▶️</span><div><b>Test / Power</b> — kurz drücken schaltet ein bzw. startet eine Messung. Zum <b>Ausschalten</b> die Taste auf einem Bildschirm <b>außerhalb</b> einer laufenden Messung lange gedrückt halten.</div></div>
+<div class="rule"><span class="ico">🔀</span><div><b>Mode / Modus-Schalter</b> — wechselt zwischen den Betriebsarten, vor allem zwischen normalem <b>Bauteiltest</b> und <b>IR-Decoding</b> (Fernbedienung auslesen).</div></div>
+<div class="rule"><span class="ico">⚡</span><div><b>High-Voltage</b> — legt die höhere Spannung an, die für die <b>Zener-Dioden-Messung</b> nötig ist. Nur im Zener-Bereich verwenden.</div></div>
+</div>
+
+<h2>So testest du ein Bauteil (Standard-Ablauf)</h2>
+<div class="card"><ul>
+<li>Bauteil muss <b>ausgebaut bzw. stromlos</b> sein, nie an einer laufenden Schaltung testen.</li>
+<li>Beinchen in die Klemmen <b>1, 2, 3</b> stecken (Reihenfolge egal, das Gerät erkennt die Belegung selbst). Bei drei Beinchen jedes in eine eigene Klemme, bei zwei Beinchen zwei verschiedene Klemmen.</li>
+<li>Hebel runterdrücken, damit das Bauteil festgeklemmt ist. Bei SMD stattdessen das Testboard nutzen.</li>
+<li><b>Test</b>-Taste drücken und kurz warten (ein Durchlauf dauert rund 5 Sekunden).</li>
+<li>Ablesen: Das Display zeigt den <b>Bauteiltyp</b>, ein kleines Schaltbild mit der <b>Pin-Belegung</b> und die Messwerte.</li>
+</ul></div>
+
+<h3>Zener-Diode messen (Sonderfall)</h3>
+<div class="card"><ul>
+<li>Zener-Diode in den eigenen <b>K-A-A-Bereich</b> setzen (Kathode an K, das ist die Ring-Seite).</li>
+<li>Die <b>High-Voltage</b>-Taste verwenden, damit genug Spannung zum Durchbruch anliegt.</li>
+<li>Misst die Zener-Spannung bis 32 V mit eigener Versorgung, genauer als der normale Diodentest.</li>
+</ul></div>
+
+<h3>Kondensator & ESR verstehen</h3>
+<div class="card">
+<p><b>ESR</b> heißt "Innenwiderstand" des Kondensators. Ein gesunder Elko hat einen niedrigen ESR. Wird ein Elko alt oder defekt, <b>steigt der ESR</b>, oft lange bevor sich die Kapazität sichtbar ändert.</p>
+<p>Darum ist der LCR-P1 stark beim Aufspüren <b>müder Elkos</b> auf alten Platinen: hoher ESR-Wert = Verdächtiger, auch wenn die Kapazität noch fast stimmt.</p>
+</div>
+
+<h2>Worauf achten & Good to know</h2>
+<div class="card">
+<div class="rule"><span class="ico">🔌</span><div><b>Immer stromlos / ausgebaut testen.</b> Das Gerät legt selbst eine kleine Prüfspannung an. Fremdspannung von außen kann es stören oder beschädigen.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Kondensatoren vorher entladen.</b> Das Gerät hat zwar einen Schutz, der geladene Kondensatoren beim Einstecken automatisch entlädt (kann kurz funken), aber ein manuelles Entladen vorher ist sicherer.</div></div>
+<div class="rule"><span class="ico">🎯</span><div><b>Pin-Erkennung als Hilfe, nicht als Gesetz.</b> Bei manchen Dioden und NPN-Transistoren kann die erkannte Pin-Zuordnung daneben liegen. Zum Vergleichen, Sortieren und Defekt-Finden ist das Gerät trotzdem sehr nützlich; für die exakte Pin-Belegung im Zweifel ins Datenblatt schauen.</div></div>
+<div class="rule"><span class="ico">📏</span><div><b>Werte relativ sehen.</b> Die genauen Testbedingungen werden nicht angezeigt, daher sind die Werte gut zum Vergleichen zweier Bauteile, aber nicht als laborgenaue Absolutwerte.</div></div>
+<div class="rule"><span class="ico">⛔</span><div><b>Keine Batterie in den 1-2-3-Klemmsockel direkt einstecken</b>, während keine Messung läuft: dieser Bereich ist dann leitend (kurzschlussartig).</div></div>
+<div class="rule"><span class="ico">⬆️</span><div><b>Firmware-Updates</b> findest du auf der FNIRSI-Website. Sie können Genauigkeit verbessern oder Funktionen ergänzen.</div></div>
+<div class="rule"><span class="ico">🌡️</span><div><b>Lagerung & Pflege:</b> trocken und kühl lagern, Akku auch bei seltenem Gebrauch hin und wieder nachladen und nicht tief entladen.</div></div>
+</div>
+</section>
+
+<!-- ============ TAB: LABORNETZTEIL ============ -->
+<section id="t-netzteil" class="hidden">
+
+<h2>Was ist ein Labornetzteil?</h2>
+<p>Eine einstellbare Gleichstromquelle für die Werkbank. Anders als ein festes Steckernetzteil kannst du hier <b>zwei Dinge getrennt einstellen</b>: die <b>Spannung</b> (wie viel Volt rauskommen) und die <b>Strombegrenzung</b> (wie viel Ampere maximal fließen dürfen). Zwei Anzeigen zeigen dir dabei die tatsächlichen Ist-Werte.</p>
+<p class="note">Die einstellbare Strombegrenzung ist das wichtigste Merkmal: sie wirkt wie eine eingebaute Sicherung und schützt deine Schaltung vor dem Durchbrennen, wenn etwas falsch verdrahtet ist.</p>
+
+<h2>Das Herzstück: CV und CC</h2>
+<p>Ein Labornetzteil arbeitet in einem von zwei Zuständen. Eine LED zeigt an, in welchem es gerade ist.</p>
+<div class="grid2">
+<div class="card"><h3>CV — Konstantspannung (Normalfall)</h3><p>Das Netzteil hält die eingestellte Spannung konstant. Der Strom ergibt sich aus dem, was die Schaltung gerade braucht. Solange der Verbrauch unter deinem Strom-Limit bleibt, läufst du in CV.</p></div>
+<div class="card"><h3>CC — Konstantstrom (Schutzfall)</h3><p>Will die Schaltung <b>mehr</b> Strom ziehen als erlaubt (z. B. Kurzschluss oder Fehler), springt das Netzteil auf CC: Es <b>begrenzt den Strom</b> auf dein Limit und <b>senkt dafür die Spannung</b> ab. Deine Schaltung wird dadurch nicht überlastet.</p></div>
+</div>
+<p class="note">Merke: In CV bestimmt die Schaltung den Strom, in CC bestimmt das Netzteil den Strom. Schlägt es unerwartet auf CC um, stimmt meist etwas in der Schaltung nicht.</p>
+
+<h2>Bedienelemente & Buchsen</h2>
+<div class="card">
+<div class="rule"><span class="ico">🔵</span><div><b>Voltage (V)</b> — stellt die Ausgangsspannung ein. Oft grob + fein (zwei Knöpfe oder Tasten).</div></div>
+<div class="rule"><span class="ico">🟠</span><div><b>Current (A)</b> — stellt das Stromlimit ein, ab dem auf CC umgeschaltet wird.</div></div>
+<div class="rule"><span class="ico">⏻</span><div><b>Output On/Off</b> — schaltet die Buchsen scharf. Solange Output aus ist, liegt nichts an den Klemmen an. <b>Immer zuerst einstellen, dann einschalten.</b></div></div>
+<div class="rule"><span class="ico">🔴</span><div><b>Rote Buchse (+)</b> — Pluspol des Ausgangs.</div></div>
+<div class="rule"><span class="ico">⚫</span><div><b>Schwarze Buchse (−)</b> — Minuspol des Ausgangs.</div></div>
+<div class="rule"><span class="ico">🟢</span><div><b>Grüne Buchse (GND / Erde)</b> — das ist die <b>Schutzerde</b> (Gehäuse/Netz), <b>nicht</b> der Minuspol! Plus und Minus "schweben" frei. Nur wenn du es brauchst, kannst du Minus mit GND verbinden.</div></div>
+</div>
+
+<h2>Standard-Vorgang: Strombegrenzung vorab einstellen</h2>
+<p>Der wichtigste Handgriff, der deine Schaltung schützt. So stellst du das Stromlimit ein, <b>bevor</b> du die Schaltung anschließt:</p>
+<div class="card"><ul>
+<li>Output <b>aus</b>. Rote und schwarze Buchse mit einem Kabel <b>kurz verbinden</b> (absichtlicher Kurzschluss, der ist hier ungefährlich).</li>
+<li>Stromregler ganz runter, Output <b>an</b>. Das Netzteil ist jetzt in CC.</li>
+<li>Stromregler langsam hochdrehen, bis die Anzeige dein gewünschtes Limit zeigt (z. B. 0,5 A für eine kleine Logik-Schaltung).</li>
+<li>Output <b>aus</b>, Kurzschluss-Kabel entfernen.</li>
+<li>Spannung einstellen, Schaltung anschließen, Output <b>an</b>. Fertig: zieht die Schaltung zu viel, riegelt das Netzteil bei deinem Limit ab.</li>
+</ul></div>
+<p class="note">Faustregel fürs Limit: knapp über dem normalen Verbrauch. So bleibt Reserve für den Betrieb, aber ein Fehler wird sofort gedeckelt.</p>
+
+<h2>Begriffe einfach erklärt</h2>
+<div class="grid2">
+<div class="card"><h3>OVP / OCP</h3><p>Überspannungs- und Überstromschutz. Schaltet den Ausgang hart ab, wenn ein eingestellter Grenzwert überschritten wird. Zusätzliche Sicherheitsnetze über CV/CC hinaus.</p></div>
+<div class="card"><h3>Ripple / Restwelligkeit</h3><p>Kleine Reste von "Zappeln" auf der eigentlich glatten Gleichspannung. Je weniger, desto sauberer. Wichtig bei empfindlicher Analog- oder Funktechnik.</p></div>
+<div class="card"><h3>Linear vs. Schaltnetzteil</h3><p><b>Linear:</b> sehr saubere Spannung, wenig Ripple, aber schwer und warm. <b>Schaltend:</b> leicht, effizient, günstiger, dafür meist etwas mehr Ripple. Für Hobby reicht ein gutes Schaltnetzteil fast immer.</p></div>
+<div class="card"><h3>Tracking (bei Doppelnetzteilen)</h3><p>Bei Geräten mit zwei Ausgängen koppelt Tracking beide, z. B. für eine symmetrische Versorgung (+12 V und −12 V gleichzeitig für Operationsverstärker).</p></div>
+<div class="card"><h3>Sense-Anschlüsse (4-Draht)</h3><p>Bei besseren Geräten: zwei dünne Extraleitungen messen die Spannung direkt am Verbraucher und gleichen den Spannungsabfall auf den Kabeln aus. Nur bei hohen Strömen/langen Kabeln relevant.</p></div>
+<div class="card"><h3>Serien-/Parallelschaltung</h3><p>Zwei Ausgänge in Reihe = mehr Spannung, parallel = mehr Strom. Nur bei Geräten, die das ausdrücklich erlauben.</p></div>
+</div>
+
+<h2>Worauf achten</h2>
+<div class="card">
+<div class="rule"><span class="ico">1️⃣</span><div><b>Reihenfolge: erst einstellen, dann anschließen, dann Output an.</b> Nie mit aktivem Ausgang verkabeln.</div></div>
+<div class="rule"><span class="ico">🛡️</span><div><b>Strombegrenzung bewusst setzen.</b> Sie ist dein bester Schutz gegen Rauchzeichen. Lieber knapp wählen und bei Bedarf erhöhen.</div></div>
+<div class="rule"><span class="ico">🔴</span><div><b>Polarität prüfen.</b> Rot an Plus, Schwarz an Minus. Eine Verpolung kann die Schaltung sofort zerstören.</div></div>
+<div class="rule"><span class="ico">🟢</span><div><b>GND ist nicht Minus.</b> Die grüne Erdbuchse mit dem Minuspol zu verwechseln ist ein klassischer Fehler. Nur bewusst brücken, wenn die Anwendung es verlangt.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Akkus laden mit Vorsicht.</b> Ein Netzteil kann grob laden (Spannung = Ladeschluss, Strom = Ladelimit), hat aber <b>keine</b> Abschaltung und keinen Verpolungsschutz wie ein echtes Ladegerät. Nie unbeaufsichtigt, besser dediziertes Ladegerät nutzen.</div></div>
+<div class="rule"><span class="ico">📟</span><div><b>Verbrauch direkt ablesen.</b> Die Strom-Anzeige zeigt dir live, wie viel deine Schaltung zieht. Praktischer "Nebenbei-Messwert" zur Fehlersuche.</div></div>
+<div class="rule"><span class="ico">⚡</span><div><b>Spannung vor dem Anschluss kontrollieren.</b> Kurz Output an, Wert auf der Anzeige (oder mit Multimeter) prüfen, dann anschließen.</div></div>
+</div>
+
+<h2>Typische Anwendungen</h2>
+<div class="card"><ul>
+<li>Schaltung testen mit Strombegrenzung als Schutznetz (das Killer-Feature).</li>
+<li>Bauteile und Module mit definierter Spannung versorgen, statt mit Batterien zu hantieren.</li>
+<li>Stromverbrauch einer Schaltung direkt ablesen.</li>
+<li>LEDs/Bauteile gezielt an ihren Grenzwerten prüfen.</li>
+<li>Symmetrische Versorgung (+/−) für Analogtechnik per Doppelnetzteil.</li>
+</ul></div>
+</section>
+
+<!-- ============ TAB: STECKBRETT ============ -->
+<section id="t-steckbrett" class="hidden">
+
+<h2>Steckbrett (Breadboard)</h2>
+<p>Die schnellste Art, eine Schaltung aufzubauen, <b>ohne zu löten</b>. Du steckst Bauteile und Drähte einfach in die Löcher, kannst alles wieder umstecken und mehrfach verwenden. Perfekt zum Ausprobieren, bevor etwas fest verlötet wird.</p>
+
+<h2>Wie es innen verdrahtet ist</h2>
+<div class="grid2">
+<div class="card"><h3>Versorgungsschienen (am Rand)</h3><p>Die langen Reihen außen, meist mit rotem (+) und blauem (−) Strich markiert. Sie sind <b>waagerecht durchgehend</b> verbunden. Hier legst du Plus und Masse an, sodass du sie überall abgreifen kannst.</p></div>
+<div class="card"><h3>Kontaktfeld (in der Mitte)</h3><p>Die kurzen Reihen im Inneren sind <b>senkrecht in 5er-Gruppen</b> verbunden. Alle fünf Löcher einer Spalte hängen zusammen, aber jede Spalte ist von der nächsten getrennt.</p></div>
+<div class="card"><h3>Die Mittelrille</h3><p>Die Kerbe in der Mitte trennt die obere von der unteren Hälfte. <b>ICs steckt man genau über die Rille</b>, damit die linke und rechte Beinchenreihe nicht kurzgeschlossen werden.</p></div>
+<div class="card"><h3>Jumper-Kabel</h3><p>Zum Verbinden der Punkte. Drei Sorten: Stecker-Stecker (Board zu Board), Stecker-Buchse (zu Modulen/Pins) und Buchse-Buchse. Alle drei lohnen sich im Vorrat.</p></div>
+</div>
+
+<h2>Aufbau in der Praxis</h2>
+<div class="card"><ul>
+<li>Zuerst Plus und Masse von der Quelle auf die beiden Versorgungsschienen legen.</li>
+<li>ICs mittig über die Rille setzen, Kerbe/Punkt am Chip zeigt Pin 1.</li>
+<li>Bauteile in getrennte Spalten stecken, Verbindungen mit Jumpern ziehen.</li>
+<li>Kurze, flach liegende Drähte halten den Aufbau übersichtlich und die Fehlersuche einfach.</li>
+</ul></div>
+
+<h2>Worauf achten</h2>
+<div class="card">
+<div class="rule"><span class="ico">➗</span><div><b>Versorgungsschienen sind bei langen Boards oft in der Mitte unterbrochen.</b> Dann mit einem kurzen Draht durchbrücken, sonst hat die zweite Hälfte keinen Strom.</div></div>
+<div class="rule"><span class="ico">🔌</span><div><b>Nur für kleine Ströme.</b> Die Kontakte vertragen keine hohen Leistungen. Für Motoren oder viel Strom ungeeignet.</div></div>
+<div class="rule"><span class="ico">📻</span><div><b>Nichts für hohe Frequenzen.</b> Die Steckkontakte stören schnelle/empfindliche Signale (z. B. Funk). Für Logik und einfache Schaltungen aber top.</div></div>
+<div class="rule"><span class="ico">🪡</span><div><b>Keine dicken Drähte reinzwängen.</b> Zu dicke Beinchen leiern die Kontakte aus, danach wackelt alles. Dünne Schaltlitze (ca. 22 AWG) oder Jumper nehmen.</div></div>
+<div class="rule"><span class="ico">🔍</span><div><b>Wackelkontakte sind die häufigste Fehlerquelle.</b> Wenn etwas sporadisch nicht geht, zuerst alle Steckverbindungen nachdrücken.</div></div>
+</div>
+
+<h2>Der nächste Schritt: Lochrasterplatine</h2>
+<p>Wenn die Schaltung auf dem Steckbrett zuverlässig läuft, lötest du sie auf einer <b>Lochrasterplatine</b> dauerhaft fest. Das Rastermaß ist überall <b>2,54 mm</b>, dadurch passen fast alle bedrahteten Bauteile und Stiftleisten direkt hinein.</p>
+<div class="grid2">
+<div class="card"><h3>Punktraster</h3><p>Jedes Loch hat ein eigenes, einzelnes Lötpad. Alle Verbindungen ziehst du selbst mit Draht oder Lötbrücken. Maximale Freiheit, etwas mehr Arbeit.</p></div>
+<div class="card"><h3>Streifenraster (Stripboard)</h3><p>Ganze Reihen sind als Kupferstreifen schon verbunden. Praktisch, aber du musst Streifen dort, wo keine Verbindung sein soll, gezielt <b>auftrennen</b> (z. B. mit einem Bohrer von Hand).</p></div>
+</div>
+<p class="note">Tipp: das Steckbrett-Layout möglichst 1:1 auf die Lochrasterplatine übertragen, dann übernimmst du die schon getestete Anordnung und machst weniger Fehler.</p>
+</section>
+
+<!-- ============ TAB: SICHERHEIT ============ -->
+<section id="t-sicherheit" class="hidden">
+
+<h2>Die wichtigste Grundregel</h2>
+<div class="danger-box">
+<p style="margin:0"><b>Nicht die Spannung tötet, sondern der Strom durch den Körper.</b> Die Spannung ist nur der Druck, der diesen Strom treibt. Schon weniger als ein Zehntel Ampere durch den Brustkorb kann tödlich sein. Deshalb ist die entscheidende Frage immer: <b>wie viel Strom kann durch mich fließen?</b></p>
+</div>
+<p>Gute Nachricht für dich: Fast alle Hobby-Spannungen (3,3 V, 5 V, 12 V, 24 V) sind für den Körper <b>ungefährlich zu berühren</b>, solange die Haut trocken ist. Die echten Gefahren im Hobby sind eher <b>Brände, Verbrennungen und explodierende Akkus</b> als der Stromschlag. Trotzdem solltest du die Grenzen kennen.</p>
+
+<h2>Spannung und der Mensch: wo wird es gefährlich?</h2>
+<div class="tbl-wrap"><table style="min-width:640px">
+<thead><tr><th>Spannung</th><th>Einstufung</th><th>Was bei Berührung passiert</th></tr></thead>
+<tbody>
+<tr><td>3,3 / 5 / 12 V</td><td><span class="lvl lvl-ok">harmlos</span></td><td>Spürst du normalerweise gar nicht. Kein Risiko für den Körper bei trockener Haut.</td></tr>
+<tr><td>24 / 48 V</td><td><span class="lvl lvl-ok">meist harmlos</span></td><td>Trocken kein Problem. Bei nasser Haut langsam spürbar.</td></tr>
+<tr><td>bis 50 V Wechsel / 120 V Gleich</td><td><span class="lvl lvl-warn">Schutzgrenze</span></td><td>Offizielle Grenze für "Schutzkleinspannung". Darunter gilt Berühren trockener Haut als sicher. Das ist die Linie, ab der man vorsichtig wird.</td></tr>
+<tr><td>ab ~50 V Wechsel</td><td><span class="lvl lvl-bad">gefährlich</span></td><td>Kann genug Strom durch den Körper treiben, um zu schaden. Ab hier nicht mehr sorglos anfassen.</td></tr>
+<tr><td>230 V (Steckdose)</td><td><span class="lvl lvl-crit">lebensgefährlich</span></td><td>Kann Herzkammerflimmern und Tod auslösen. Nur mit Erfahrung, FI-Schutzschalter und Schutzklasse arbeiten.</td></tr>
+</tbody>
+</table></div>
+<p class="note">Wechselspannung (wie aus der Steckdose, 50 Hz) ist bei gleichem Wert gefährlicher als Gleichspannung, weil sie das Herz leichter aus dem Takt bringt.</p>
+
+<h2>Strom durch den Körper: was passiert ab wie viel?</h2>
+<p class="note">Faustwerte für Wechselstrom auf dem Weg Hand zu Hand. Individuell verschieden, also als Größenordnung verstehen.</p>
+<div class="tbl-wrap"><table style="min-width:640px">
+<thead><tr><th>Strom</th><th>Stufe</th><th>Wirkung auf den Körper</th></tr></thead>
+<tbody>
+<tr><td>ca. 1 mA</td><td><span class="lvl lvl-ok">Wahrnehmung</span></td><td>Gerade als Kribbeln spürbar.</td></tr>
+<tr><td>5 bis 10 mA</td><td><span class="lvl lvl-warn">schmerzhaft</span></td><td>Deutlich unangenehm, Muskeln zucken.</td></tr>
+<tr><td>ca. 10 bis 15 mA</td><td><span class="lvl lvl-bad">Loslass-Grenze</span></td><td>Die Muskeln verkrampfen so, dass man den Leiter <b>nicht mehr loslassen kann</b>. Besonders tückisch.</td></tr>
+<tr><td>ab ~30 mA</td><td><span class="lvl lvl-bad">Atemnot</span></td><td>Atemmuskeln verkrampfen. Genau hier schaltet ein FI-Schutzschalter ab.</td></tr>
+<tr><td>ab ~50 mA</td><td><span class="lvl lvl-crit">Herzgefahr</span></td><td>Herzkammerflimmern wird wahrscheinlich, das ist lebensbedrohlich.</td></tr>
+<tr><td>über ~100 mA</td><td><span class="lvl lvl-crit">tödlich</span></td><td>Durchs Herz fast sicher tödlich. Dazu schwere Verbrennungen.</td></tr>
+</tbody>
+</table></div>
+
+<h2>Warum nasse Haut alles verändert</h2>
+<div class="card">
+<p>Dein Körper bremst den Strom über seinen <b>Widerstand</b>. Der hängt fast nur von der Haut ab:</p>
+<ul>
+<li><b>Trockene Haut:</b> sehr hoher Widerstand (grob 50 bis 100 kΩ). Bei 50 V fließt daher nur etwa 0,5 bis 1 mA, kaum spürbar.</li>
+<li><b>Nasse oder schwitzige Haut:</b> der Widerstand bricht auf wenige tausend Ω ein. Dieselben 50 V treiben dann plötzlich ein Vielfaches an Strom durch dich, bis in den gefährlichen Bereich.</li>
+</ul>
+<p style="margin-bottom:0">Darum: <b>nie mit feuchten Händen, nie im Nassen, nie schwitzend an höhere Spannungen.</b> Dieselbe Spannung, die trocken harmlos ist, kann nass gefährlich werden.</p>
+</div>
+
+<h2>Versteckte Gefahren trotz niedriger Spannung</h2>
+<div class="card">
+<div class="rule"><span class="ico">⚡</span><div><b>Geladene Kondensatoren beißen auch nach dem Ausschalten.</b> Große Elkos in Netzteilen, Foto-Blitze und vor allem der Kondensator einer <b>Mikrowelle</b> speichern gefährliche Energie, teils tödlich. Vor dem Anfassen über einen Widerstand entladen.</div></div>
+<div class="rule"><span class="ico">🔥</span><div><b>Lithium-Akku-Kurzschluss</b> setzt schlagartig sehr viel Strom frei: Hitze, Brand, im schlimmsten Fall Explosion. Plus und Minus einer LiPo-Zelle nie direkt verbinden, nie mechanisch beschädigen.</div></div>
+<div class="rule"><span class="ico">🪙</span><div><b>Kurzschluss an einer starken Quelle</b> (Akku, Labornetzteil ohne Limit): dünnes Metall kann glühen oder verschweißen. Verbrennungsgefahr, schmelzende Werkzeuge. Ringe und Armbänder ablegen.</div></div>
+<div class="rule"><span class="ico">🌡️</span><div><b>Lötkolben ~350 °C, Heißluft noch heißer.</b> Sofortige Verbrennung. Abgelegt immer in den Halter, Kabel nie über die Spitze.</div></div>
+</div>
+
+<h2>Wärme, Leistung und Brandgefahr</h2>
+<p>Jedes Bauteil setzt überschüssige Energie als <b>Wärme</b> um. Zu viel davon ist die häufigste Brandursache im Hobby. Was bei Überlastung passiert:</p>
+<div class="tbl-wrap"><table style="min-width:640px">
+<thead><tr><th>Situation</th><th>Folge</th></tr></thead>
+<tbody>
+<tr><td>1/4-W-Widerstand mit 1 W belastet</td><td>Wird sehr heiß, verfärbt sich, raucht, brennt durch.</td></tr>
+<tr><td>Linearregler (z. B. 7805) mit großer Spannungsdifferenz</td><td>Verheizt die Differenz, ohne Kühlkörper Überhitzung und Abschaltung oder Defekt.</td></tr>
+<tr><td>Zu dünner Draht / Leiterbahn für den Strom</td><td>Erhitzt sich, schmilzt die Isolierung, kann einen Kabelbrand auslösen.</td></tr>
+<tr><td>Bauteil verpolt oder überspannt</td><td>Kann sofort durchbrennen, Elkos können aufplatzen.</td></tr>
+</tbody>
+</table></div>
+<p class="note">Merksatz: Wird etwas heiß, das nicht heiß werden soll, sofort abschalten und die Ursache suchen. Heiß ist immer eine Warnung.</p>
+
+<h2>Netzspannung (230 V): eine eigene Liga</h2>
+<div class="danger-box">
+<p style="margin:0 0 8px"><b>230 V aus der Steckdose ist kein Einsteiger-Spielfeld.</b> Hier reicht ein Fehler für einen tödlichen Unfall oder Wohnungsbrand. Wenn du nicht sicher weißt, was du tust, lass es oder hol jemanden mit Erfahrung dazu.</p>
+<p style="margin:0">Pflicht bei Netzarbeit: ein <b>FI-Schutzschalter (RCD)</b> in der Zuleitung, Geräte der passenden Schutzklasse, einwandfreie Isolierung und die <b>Eine-Hand-Regel</b> (nur eine Hand benutzen, damit kein Strom über die Brust von Hand zu Hand fließt).</p>
+</div>
+
+<h2>Im Notfall</h2>
+<div class="card">
+<div class="rule"><span class="ico">🚫</span><div><b>Stromschlag:</b> die Person <b>nicht</b> berühren, solange sie noch unter Strom steht. Zuerst Strom abschalten (Stecker, Sicherung), dann Notruf, dann helfen.</div></div>
+<div class="rule"><span class="ico">💧</span><div><b>Elektrischer Brand:</b> kein Wasser auf Geräte unter Spannung. Erst Strom trennen. Geeignet sind CO2- oder Pulverlöscher.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Brennender Lithium-Akku:</b> lässt sich kaum löschen und kann wieder aufflammen. Wenn gefahrlos möglich, das Gerät nach draußen bringen, viel Wasser oder Sand, Abstand halten, Feuerwehr rufen.</div></div>
+<div class="rule"><span class="ico">📞</span><div><b>Im Zweifel Notruf 112.</b> Bei Stromschlag mit Bewusstlosigkeit, Herzproblemen oder Verbrennungen immer.</div></div>
+</div>
+</section>
+
+<!-- ============ TAB: DISPLAYS ============ -->
+<section id="t-displays" class="hidden">
+
+<h2>Displays für Projekte</h2>
+<p>Welches Display passt, entscheidet sich an wenigen Fragen: <b>Farbe oder einfarbig? Wie viel Strom darf es ziehen? Soll sich das Bild oft ändern? Touch ja oder nein? Wie viele Pins sind frei?</b> Hier die populärsten Typen und wofür sie gemacht sind.</p>
+
+<h2>Die populären Typen im Detail</h2>
+<div class="grid2">
+<div class="card"><h3>OLED (SSD1306 / SH1106)</h3>
+<p>Kleines Display, bei dem <b>jedes Pixel selbst leuchtet</b>. Dadurch tiefes Schwarz, top Kontrast, gestochen scharf. Typisch 0,96" und 1,3", meist einfarbig (weiß/blau).</p>
+<p class="note">Anschluss: I²C (2 Leitungen) · Strom: sehr gering · <b>Gut für:</b> Messwerte, Statuszeilen, kleine Menüs, Wearables. Sehr günstig und einfach.</p></div>
+
+<div class="card"><h3>TFT-LCD (ST7735 / ILI9341 / ST7789)</h3>
+<p>Das farbige Standard-Display. Hintergrundbeleuchtet, viele Größen (1,8" bis ~3,5"). Zeigt Bilder, Diagramme, ganze Oberflächen.</p>
+<p class="note">Anschluss: SPI · Strom: mittel (Beleuchtung läuft immer) · <b>Gut für:</b> bunte GUIs, Kurven, Bildanzeige, kleine Spiele. Schwäche: einfache TFT haben magere Blickwinkel.</p></div>
+
+<div class="card"><h3>IPS (bessere TFT-Variante)</h3>
+<p>Ein TFT mit IPS-Panel: <b>sehr gute Blickwinkel und kräftigere Farben</b>. Von der Seite noch klar ablesbar, anders als billige TFT.</p>
+<p class="note">Anschluss: SPI · <b>Gut für:</b> alles, was man aus verschiedenen Winkeln sehen will, hochwertige Anzeigen. Etwas teurer als einfache TFT.</p></div>
+
+<div class="card"><h3>Rundes Display (GC9A01)</h3>
+<p>Kreisrundes IPS, typisch 1,28". Liegt im Trend für den Smartwatch-Look und runde Zeiger-Anzeigen.</p>
+<p class="note">Anschluss: SPI · <b>Gut für:</b> Tacho/Gauge-Optik, runde Uhren, Drehregler-Anzeigen, Deko-Projekte.</p></div>
+
+<div class="card"><h3>E-Paper / E-Ink (Waveshare & Co.)</h3>
+<p>Elektronisches Papier. <b>Hält das Bild ganz ohne Strom</b>, Energie braucht nur der Bildwechsel. Bei Tageslicht hervorragend lesbar, leuchtet nicht selbst (augenfreundlich). Meist schwarz/weiß, manche mit Rot/Gelb.</p>
+<p class="note">Anschluss: SPI · Strom: minimal · <b>Gut für:</b> Wetterstation, Namens-/Preisschild, batterie- oder solarbetriebene Anzeigen. Schwäche: sehr langsamer Bildaufbau (Sekunden), kein Video.</p></div>
+
+<div class="card"><h3>Zeichen-LCD (HD44780, 16x2 / 20x4)</h3>
+<p>Der Klassiker, der nur <b>Text in festen Feldern</b> zeigt (z. B. 16 Zeichen mal 2 Zeilen). Robust und kinderleicht anzusteuern, vor allem mit aufgestecktem I²C-Modul.</p>
+<p class="note">Anschluss: I²C (mit Modul) · <b>Gut für:</b> simple Textausgaben, Retro-Look, Einsteigerprojekte. Keine Grafik.</p></div>
+
+<div class="card"><h3>7-Segment (TM1637 / MAX7219)</h3>
+<p>Die bekannten Ziffernblöcke wie bei einer Digitaluhr. Auf große Distanz top ablesbar. Ansteuerung über einen kleinen Treiberchip mit wenigen Pins.</p>
+<p class="note">Anschluss: 2-3 Pins · <b>Gut für:</b> reine Zahlen wie Uhr, Zähler, Temperatur. Nichts für Text oder Grafik.</p></div>
+
+<div class="card"><h3>LED-Matrix (MAX7219 / WS2812)</h3>
+<p>Ein Gitter aus LEDs, oft 8x8 oder als Kette. MAX7219 für einfarbig, WS2812 (Neopixel) für volle RGB-Farben.</p>
+<p class="note">Anschluss: SPI-artig bzw. 1 Datenleitung · <b>Gut für:</b> Lauftext, einfache Animationen, Lichteffekte, Deko und Statusanzeigen.</p></div>
+
+<div class="card"><h3>Nextion (Smart-Display)</h3>
+<p>Ein TFT mit <b>eigenem Prozessor</b>. Die Oberfläche baust du am PC zusammen und schickst dem Display nur kurze Befehle. Das entlastet deinen Mikrocontroller stark. Touch ist dabei.</p>
+<p class="note">Anschluss: seriell (UART) · <b>Gut für:</b> schöne Bedienoberflächen ohne viel Grafik-Programmierung. Teurer, eigenes Software-Ökosystem.</p></div>
+
+<div class="card"><h3>Raspberry-Pi-Displays (HDMI / DSI)</h3>
+<p>Echte Monitore oder offizielle Touch-Displays für den Raspberry Pi (ein kleiner Linux-Computer). Hier läuft eine <b>vollwertige grafische Oberfläche</b> wie am PC.</p>
+<p class="note">Anschluss: HDMI oder DSI · <b>Gut für:</b> Dashboards, Mediacenter, Touch-Bedienpanels, alles mit Desktop oder Browser.</p></div>
+</div>
+
+<h2>Typen im Vergleich (1 bis 10)</h2>
+<div id="display-rating"></div>
+<p class="note">Höhere Balken bedeuten mehr von der jeweiligen Eigenschaft. "Sparsam" meint geringen Stromverbrauch, "Tempo" die Geschwindigkeit des Bildaufbaus. Grobe Orientierungswerte.</p>
+
+<h2>Touch: resistiv oder kapazitiv?</h2>
+<div class="grid2">
+<div class="card"><h3>Resistiv (druckempfindlich)</h3><p>Reagiert auf <b>Druck</b>, funktioniert daher auch mit Fingernagel, Stift oder Handschuh. Günstig, aber weniger präzise und nur ein Berührpunkt. Oft bei ILI9341-TFT (Touch-Chip XPT2046).</p></div>
+<div class="card"><h3>Kapazitiv (wie am Handy)</h3><p>Reagiert auf die <b>Berührung der Haut</b>. Präziser, mehrere Finger gleichzeitig (Wischen, Zoomen), braucht aber bloßen Finger. Touch-Chip z. B. FT6236 oder GT911.</p></div>
+</div>
+
+<h2>Anschluss-Arten kurz erklärt</h2>
+<div class="card">
+<div class="rule"><span class="ico">②</span><div><b>I²C</b> braucht nur 2 Datenleitungen, ist aber langsam. Ideal für kleine OLED- und Text-Displays.</div></div>
+<div class="rule"><span class="ico">④</span><div><b>SPI</b> nutzt mehr Leitungen, ist dafür deutlich schneller. Der Standard für farbige TFT, IPS, runde und E-Paper-Displays.</div></div>
+<div class="rule"><span class="ico">🔢</span><div><b>Parallel</b> nutzt viele Pins und ist sehr schnell, kommt bei großen, schnellen Displays vor. Frisst Anschlüsse.</div></div>
+<div class="rule"><span class="ico">🖧</span><div><b>UART (seriell)</b> ist die einfache Daten-Leitung für Smart-Displays wie Nextion.</div></div>
+<div class="rule"><span class="ico">🖥️</span><div><b>HDMI / DSI</b> sind die Monitor-Anschlüsse, praktisch nur am Raspberry Pi und ähnlichen Mini-Computern.</div></div>
+</div>
+
+<h2>Auswahlhilfe: für das nimm das</h2>
+<div class="tbl-wrap"><table style="min-width:560px">
+<thead><tr><th>Du willst…</th><th>Empfehlung</th></tr></thead>
+<tbody>
+<tr><td>kleine scharfe Statusanzeige, wenig Strom</td><td><b>OLED</b> 0,96" (SSD1306)</td></tr>
+<tr><td>bunte Oberfläche, Diagramme, Bilder</td><td><b>TFT</b>, für gute Blickwinkel <b>IPS</b></td></tr>
+<tr><td>runden Look, Tacho oder Gauge</td><td><b>Rundes Display</b> (GC9A01)</td></tr>
+<tr><td>Batterie/Solar, Bild wechselt selten, Tageslicht</td><td><b>E-Paper</b></td></tr>
+<tr><td>nur Text, simpel und billig</td><td><b>Zeichen-LCD</b> 16x2</td></tr>
+<tr><td>nur Zahlen, aus Distanz lesbar</td><td><b>7-Segment</b> (TM1637)</td></tr>
+<tr><td>Lauftext oder RGB-Lichteffekte</td><td><b>LED-Matrix</b> (WS2812)</td></tr>
+<tr><td>Touch-Bedienung ohne viel Programmierung</td><td><b>Nextion</b></td></tr>
+<tr><td>volle grafische Oberfläche / Desktop</td><td><b>Raspberry Pi</b> mit HDMI/DSI</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<!-- ============ TAB: MOTOREN ============ -->
+<section id="t-motoren" class="hidden">
+
+<h2>Motorarten</h2>
+<p>Die Wahl hängt davon ab, was du brauchst: einfach nur Drehung, kontrollierte <b>Position</b>, viel <b>Kraft</b> oder hohe <b>Drehzahl</b>. Wichtig vorab: Motoren hängen <b>nie direkt</b> am Mikrocontroller-Pin, immer ein Treiber dazwischen (siehe unten).</p>
+
+<div class="grid2">
+<div class="card"><h3>Gleichstrommotor (Bürstenmotor)</h3>
+<p>Der einfachste Motor: Spannung dran und er dreht. Polung tauschen kehrt die Richtung um, mehr Spannung dreht schneller. Drehzahl regelt man per schnellem An/Aus-Schalten (PWM).</p>
+<p class="note">Ansteuerung: H-Brücke (Richtung) oder MOSFET (nur an/aus) · <b>Gut für:</b> Räder, Lüfter, Pumpen. Schwäche: Bürsten verschleißen, keine Positionskontrolle.</p></div>
+
+<div class="card"><h3>Getriebemotor</h3>
+<p>Ein Gleichstrommotor mit angebautem Getriebe: <b>langsamer, dafür viel mehr Kraft</b> (Drehmoment).</p>
+<p class="note">Ansteuerung: wie Gleichstrommotor · <b>Gut für:</b> langsame, kräftige Antriebe wie Roboter-Räder, Klappen, Förderbänder.</p></div>
+
+<div class="card"><h3>Servo</h3>
+<p>Motor, Getriebe und Elektronik in einem Gehäuse. Fährt einen <b>bestimmten Winkel</b> an (meist 0 bis 180°) und hält ihn. Der Winkel wird über die Breite eines Steuerimpulses vorgegeben. Es gibt auch endlos drehende "Continuous"-Servos (dann steuert man Geschwindigkeit statt Winkel).</p>
+<p class="note">Anschluss: 3 Drähte (Plus, Minus, Signal) · <b>Gut für:</b> Lenkung, Greifarme, Kameraschwenk, Klappen. Braucht eine eigene, kräftige Stromversorgung.</p></div>
+
+<div class="card"><h3>Schrittmotor (Stepper)</h3>
+<p>Dreht in vielen <b>kleinen, exakten Schritten</b> (typisch 200 pro Umdrehung, also 1,8° je Schritt). Damit positioniert er sehr genau und wiederholbar, ganz ohne Rückmeldesensor. Über "Mikroschritte" wird es noch feiner.</p>
+<p class="note">Bauformen: <b>bipolar</b> (4 Drähte, kräftig, am häufigsten), <b>unipolar</b> (5-6 Drähte). Größen nach NEMA, z. B. <b>NEMA17</b> im 3D-Drucker. Der kleine 28BYJ-48 ist günstig, aber schwach.<br><b>Gut für:</b> 3D-Drucker, CNC, Kameraslider, alles mit exakter Position. Schwäche: hält die Position auch im Stillstand und wird dabei warm, kann bei Überlast Schritte verlieren.</p></div>
+
+<div class="card"><h3>Bürstenloser Motor (BLDC)</h3>
+<p>Kein Bürstenverschleiß, sehr effizient, kräftig und hohe Drehzahl. Dafür braucht er eine aufwändigere Steuerung.</p>
+<p class="note">Ansteuerung: ESC (Motorregler), bekommt ein servoähnliches Steuersignal · <b>Gut für:</b> Drohnen, RC-Modelle, E-Bikes, schnelle effiziente Antriebe. Schwäche: teurer, komplexere Steuerung.</p></div>
+</div>
+
+<h2>Typen im Vergleich (1 bis 10)</h2>
+<div id="motor-rating"></div>
+<p class="note">Höhere Balken bedeuten mehr von der jeweiligen Eigenschaft. "Einfachheit" meint, wie leicht die Ansteuerung ist, "Günstig" wie preiswert. Grobe Orientierungswerte, keine Labormessung.</p>
+
+<h2>Treiber: das Bindeglied zum Mikrocontroller</h2>
+<p>Ein Mikrocontroller-Pin liefert nur wenige Milliampere, ein Motor will Hunderte bis Tausende. Der Treiber nimmt das schwache Steuersignal und schaltet damit den starken Motorstrom.</p>
+<div class="grid2">
+<div class="card"><h3>H-Brücke (für Gleichstrommotoren)</h3>
+<p>Schaltung, die einen Motor in <b>beide Richtungen</b> drehen lassen kann. Module: <b>L298N</b> (alt, robust, aber ineffizient und wird heiß), <b>TB6612FNG</b> und <b>DRV8833</b> (moderner, effizienter, kühler).</p></div>
+<div class="card"><h3>Schrittmotor-Treiber</h3>
+<p>Bekommt nur zwei Signale: <b>Step</b> (ein Impuls = ein Schritt) und <b>Direction</b> (Richtung). Verbreitet: <b>A4988</b> (Standard, günstig), <b>DRV8825</b> (mehr Strom, feinere Schritte), <b>TMC2209</b> (sehr leise, beliebt in modernen 3D-Druckern). Der Motorstrom wird per kleinem Poti (VREF) eingestellt.</p></div>
+<div class="card"><h3>ESC (für bürstenlose Motoren)</h3>
+<p>Der Motorregler für BLDC. Bekommt ein servoähnliches Steuersignal und erzeugt daraus die komplexe Ansteuerung. Auf passende Strombelastbarkeit achten.</p></div>
+<div class="card"><h3>Servo (Treiber schon eingebaut)</h3>
+<p>Ein Servo braucht keinen externen Treiber, die Elektronik sitzt schon drin. Es reicht das Steuersignal vom Mikrocontroller plus eine eigene Stromversorgung.</p></div>
+</div>
+
+<h2>Worauf achten</h2>
+<div class="card">
+<div class="rule"><span class="ico">🚫</span><div><b>Nie direkt am Mikrocontroller-Pin.</b> Immer ein Treiber dazwischen, sonst stirbt der Pin am zu hohen Strom.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Eigene Stromversorgung für den Motor.</b> Motoren ziehen viel und erzeugen Störungen. Die Logik (Mikrocontroller) sollte nicht aus derselben Leitung gespeist werden.</div></div>
+<div class="rule"><span class="ico">🔗</span><div><b>Gemeinsame Masse.</b> Motor-Versorgung und Steuer-Elektronik müssen ihre Masse (Minus) miteinander verbinden, sonst kommt das Steuersignal nicht an.</div></div>
+<div class="rule"><span class="ico">⚡</span><div><b>Anlauf- und Blockierstrom einplanen.</b> Beim Start oder wenn er blockiert, zieht ein Motor ein Vielfaches des normalen Stroms. Treiber und Netzteil danach auslegen, nicht nach dem Nennstrom.</div></div>
+<div class="rule"><span class="ico">🎚️</span><div><b>Schrittmotor-Treiber: Strom einstellen (VREF).</b> Zu hoch eingestellt wird heiß, zu niedrig verliert Schritte. Mit dem kleinen Poti am Treiber justieren.</div></div>
+<div class="rule"><span class="ico">🌡️</span><div><b>Treiber kühlen.</b> A4988, DRV8825 und L298N werden warm bis heiß. Kühlkörper aufkleben und für Luft sorgen.</div></div>
+<div class="rule"><span class="ico">⚙️</span><div><b>Freilaufdiode.</b> Bei einfachen Schaltungen mit MOSFET nötig. Fertige Treiber-Module haben den Schutz meist schon eingebaut.</div></div>
+</div>
+
+<h2>Auswahlhilfe: für das nimm das</h2>
+<div class="tbl-wrap"><table style="min-width:560px">
+<thead><tr><th>Du brauchst…</th><th>Empfehlung</th></tr></thead>
+<tbody>
+<tr><td>einfache Drehung, Tempo/Richtung grob</td><td><b>Gleichstrommotor</b> + H-Brücke</td></tr>
+<tr><td>viel Kraft bei wenig Drehzahl</td><td><b>Getriebemotor</b></td></tr>
+<tr><td>einen festen Winkel anfahren und halten</td><td><b>Servo</b></td></tr>
+<tr><td>exakte, wiederholbare Position (3D-Druck, CNC)</td><td><b>Schrittmotor</b> + A4988/TMC2209</td></tr>
+<tr><td>möglichst leisen Schrittmotorbetrieb</td><td>Schrittmotor + <b>TMC2209</b></td></tr>
+<tr><td>hohe Drehzahl, effizient (Drohne, RC)</td><td><b>BLDC</b> + ESC</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<!-- ============ TAB: MIKROCONTROLLER ============ -->
+<section id="t-mcu" class="hidden">
+
+<h2>Was ist ein Mikrocontroller?</h2>
+<p>Ein kompletter Mini-Computer auf einem einzigen Chip: Rechenkern, Speicher und Anschlüsse in einem. Er läuft <b>ohne Betriebssystem</b> und führt direkt dein eines Programm aus, immer und immer wieder. Damit liest er Sensoren, trifft Entscheidungen und steuert Ausgänge. Das Herzstück fast jedes Projekts.</p>
+<div class="card">
+<h3>Wichtige Abgrenzung: Mikrocontroller vs. Raspberry Pi</h3>
+<p style="margin-bottom:0">Der große <b>Raspberry Pi</b> (Modell B, Zero usw.) ist <b>kein</b> Mikrocontroller, sondern ein kleiner Linux-Computer mit Betriebssystem, Bildschirmanschluss und vielen Programmen gleichzeitig. Ein Mikrocontroller (Arduino, ESP32, Pico) macht dagegen <b>eine</b> Sache zuverlässig und in Echtzeit, startet sofort und braucht kaum Strom. Für Steuern und Messen nimmt man den Mikrocontroller, für Desktop, Browser oder Kamera-Software den Pi.</p>
+</div>
+
+<h2>Die populären Boards</h2>
+<div class="grid2">
+<div class="card"><h3>Arduino Uno / Nano</h3>
+<p>Der Klassiker für den Einstieg. Einfach, extrem gut dokumentiert, riesige Bibliothek- und Zubehör-Welt. Läuft mit <b>5 V</b> Logik (robust gegenüber Störungen). Schwächen: wenig Rechenleistung, kein Funk an Bord.</p>
+<p class="note">Neuer: <b>Uno R4</b> mit deutlich mehr Leistung (32-Bit) und einer WiFi-Variante. <b>Gut für:</b> Lernen, einfache Sensor- und Schaltprojekte.</p></div>
+
+<div class="card"><h3>ESP32</h3>
+<p>Der Allrounder mit <b>WLAN und Bluetooth an Bord</b>. Zwei Rechenkerne bis 240 MHz, viel Speicher, reiche Anschlüsse. Läuft mit <b>3,3 V</b>. Sehr günstig. Quasi Standard für alles Vernetzte.</p>
+<p class="note">Varianten: <b>S3</b> (mehr Leistung, KI-Beschleunigung), <b>C3</b> (klein, günstig, RISC-V), <b>C6</b> (WiFi 6, Thread/Zigbee). <b>Gut für:</b> smarte Geräte, Sensoren mit App-Anbindung, Heimautomatisierung.</p></div>
+
+<div class="card"><h3>ESP8266</h3>
+<p>Der ältere, kleinere Bruder des ESP32: nur WLAN, ein Kern, sehr billig. 3,3 V. Für reine WLAN-Aufgaben ohne Bluetooth immer noch beliebt.</p>
+<p class="note"><b>Gut für:</b> günstige WLAN-Schalter und -Sensoren, wenn die volle ESP32-Leistung nicht nötig ist.</p></div>
+
+<div class="card"><h3>Raspberry Pi Pico / Pico 2</h3>
+<p>Sehr günstig, sparsam und einsteigerfreundlich, besonders mit Python. Der <b>Pico 2</b> (RP2350) hat zwei kräftigere Kerne, doppelt so viel Speicher und rechnet auch mit Kommazahlen schnell. Läuft mit 3,3 V. Die <b>W</b>-Varianten haben WLAN und Bluetooth.</p>
+<p class="note">Besonderheit: programmierbare Ein-/Ausgänge (PIO) für eigene, exakte Signalprotokolle. <b>Gut für:</b> stromsparende Projekte, Python-Einstieg, präzise Signalsteuerung.</p></div>
+
+<div class="card"><h3>STM32 ("Blue Pill" & Co.)</h3>
+<p>Leistungsstarke ARM-Controller mit sehr präzisen Anschlüssen (Messen, Zeitsteuerung). Skalierbare Familie, lange lieferbar. Kein Funk an Bord, und die Lernkurve ist steiler.</p>
+<p class="note"><b>Gut für:</b> anspruchsvolle Steuerungen, Motorregelung, Robotik, alles wo Präzision und Tempo zählen.</p></div>
+
+<div class="card"><h3>Spezialisten (gut zu wissen)</h3>
+<p><b>Teensy</b>: sehr schnell, top für Audio. <b>nRF52840</b>: Bluetooth-Spezialist, extrem stromsparend. <b>ATtiny</b>: winziger Chip für ganz kleine Aufgaben. Greift man, wenn ein Standard-Board nicht passt.</p></div>
+</div>
+
+<h2>Boards im Vergleich (1 bis 10)</h2>
+<div id="mcu-rating"></div>
+<p class="note">"Funk" meint WLAN/Bluetooth an Bord, "Sparsam" den Stromverbrauch, "Community" die Menge an Anleitungen und fertigen Bibliotheken. Höher ist mehr. Grobe Orientierung.</p>
+
+<h2>Pin-Grundlagen</h2>
+<div class="card">
+<div class="rule"><span class="ico">🔲</span><div><b>GPIO (digitale Pins):</b> können HIGH (an) oder LOW (aus) sein. Damit liest du Taster oder schaltest LEDs, Transistoren usw.</div></div>
+<div class="rule"><span class="ico">📈</span><div><b>Analoge Eingänge (ADC):</b> messen eine Spannung als Zahlwert, z. B. von einem Poti oder Sensor. Nicht jeder Pin kann das.</div></div>
+<div class="rule"><span class="ico">〰️</span><div><b>PWM-Ausgänge:</b> schnelles An/Aus, um Helligkeit, Drehzahl oder Servowinkel stufenlos zu steuern.</div></div>
+<div class="rule"><span class="ico">⚡</span><div><b>Logikpegel 3,3 V vs. 5 V:</b> der wichtigste Stolperstein. ESP32 und Pico vertragen an ihren Pins <b>nur 3,3 V</b>. 5 V von einem Arduino oder Sensor direkt drauf kann den Pin zerstören. Dann Pegelwandler oder Spannungsteiler nutzen.</div></div>
+<div class="rule"><span class="ico">🔌</span><div><b>Pin-Strom ist begrenzt</b> (grob 20 bis 40 mA pro Pin). Motoren, LED-Streifen oder Relais nie direkt anschließen, immer über Transistor/MOSFET oder Treiber.</div></div>
+<div class="rule"><span class="ico">🔗</span><div><b>I²C, SPI, UART</b> sind die Datenleitungen zu Displays, Sensoren und Modulen (siehe Tab "Displays"). Gemeinsame Masse nicht vergessen.</div></div>
+</div>
+
+<h2>Speicher & Stromversorgung kurz</h2>
+<div class="grid2">
+<div class="card"><h3>Flash vs. RAM</h3><p><b>Flash</b> ist der dauerhafte Programmspeicher (dein Code bleibt nach dem Ausschalten). <b>RAM</b> ist der flüchtige Arbeitsspeicher während des Laufens. Mehr von beidem erlaubt größere Programme und mehr Daten.</p></div>
+<div class="card"><h3>Versorgung</h3><p>Meist über <b>USB</b>. Oder über einen <b>VIN</b>-Pin mit etwas höherer Spannung, die ein Regler auf dem Board herunterregelt. Es gibt auch einen 3,3-V- oder 5-V-Pin zur Versorgung von Modulen. Pin-Spannung des Boards beachten.</p></div>
+</div>
+
+<h2>Womit programmiert man?</h2>
+<div class="card">
+<div class="rule"><span class="ico">🅰️</span><div><b>Arduino IDE</b> (Sprache C/C++): der mit Abstand gängigste Einstieg, läuft für fast alle Boards inklusive ESP32 und Pico. Riesige Bibliotheks-Auswahl.</div></div>
+<div class="rule"><span class="ico">🐍</span><div><b>MicroPython / CircuitPython</b> (Sprache Python): einsteigerfreundlich, schnelles Ausprobieren, besonders beliebt auf Pico und ESP32.</div></div>
+<div class="rule"><span class="ico">🛠️</span><div><b>PlatformIO</b>: komfortable Profi-Umgebung für größere Projekte. <b>ESP-IDF</b>: das tiefe Entwicklerwerkzeug speziell für ESP32.</div></div>
+</div>
+
+<h2>Worauf achten</h2>
+<div class="card">
+<div class="rule"><span class="ico">⚡</span><div><b>3,3 V oder 5 V?</b> Immer zuerst klären, mit welcher Spannung Board und angeschlossenes Teil arbeiten, sonst Pin-Schaden.</div></div>
+<div class="rule"><span class="ico">🔌</span><div><b>Keine Last direkt am Pin.</b> Strombegrenzung beachten, kräftige Verbraucher über Treiber schalten.</div></div>
+<div class="rule"><span class="ico">🔋</span><div><b>Saubere Versorgung.</b> WLAN-Module wie der ESP32 ziehen kurze Stromspitzen. Schwache USB-Quellen führen zu Abstürzen, lieber ein Stützkondensator und eine kräftige Quelle.</div></div>
+<div class="rule"><span class="ico">📍</span><div><b>Nicht jeder Pin kann alles.</b> Manche sind nur Eingang, manche stören beim Start (Boot-Pins). Pin-Belegungsplan ("Pinout") des Boards bereithalten.</div></div>
+</div>
+
+<h2>Auswahlhilfe: für das nimm das</h2>
+<div class="tbl-wrap"><table style="min-width:560px">
+<thead><tr><th>Du willst…</th><th>Empfehlung</th></tr></thead>
+<tbody>
+<tr><td>einfach lernen, simple Projekte</td><td><b>Arduino Uno / Nano</b></td></tr>
+<tr><td>WLAN/Bluetooth, App-Anbindung, smart</td><td><b>ESP32</b></td></tr>
+<tr><td>günstiger reiner WLAN-Schalter/-Sensor</td><td><b>ESP8266</b> oder ESP32-C3</td></tr>
+<tr><td>stromsparend, Python, sehr günstig</td><td><b>Raspberry Pi Pico 2 (W)</b></td></tr>
+<tr><td>hohe Präzision, Motorregelung, Tempo</td><td><b>STM32</b></td></tr>
+<tr><td>volle GUI, Linux, Browser, Kamera</td><td><b>Raspberry Pi</b> (Mini-Computer, kein MCU)</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<script>
+/* ---------- TABS ---------- */
+const TABS=[{k:"grundlagen",l:"Grundlagen"},{k:"komponenten",l:"Komponenten"},{k:"displays",l:"Displays"},{k:"motoren",l:"Motoren"},{k:"mcu",l:"Mikrocontroller"},{k:"regeln",l:"Regeln & Praxis"},{k:"sicherheit",l:"Sicherheit"},{k:"steckbrett",l:"Steckbrett"},{k:"messgeraet",l:"Messgerät"},{k:"lcrp1",l:"LCR-P1"},{k:"netzteil",l:"Labornetzteil"},{k:"rechner",l:"Rechner"}];
+const tabsDiv=document.getElementById("tabs");
+TABS.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t.l;b.className=i===0?"active":"";b.onclick=()=>{
+TABS.forEach(x=>document.getElementById("t-"+x.k).classList.add("hidden"));
+document.getElementById("t-"+t.k).classList.remove("hidden");
+tabsDiv.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+window.scrollTo(0,0);
+};tabsDiv.appendChild(b)});
+
+/* ---------- KOMPONENTEN ---------- */
+const C=[
+{n:"Widerstand",cat:"passiv",catL:"Passiv",fn:"Bremst den Strom, erzeugt definierten Spannungsabfall.",app:"Vorwiderstand für LEDs, Pull-up/down, Strombegrenzung, Spannungsteiler.",det:{kenn:"Wert in Ω (z. B. 220 Ω, 10 kΩ), Belastbarkeit meist 0,25 W (1/4 W).",kompat:"Universell, keine Polarität. Wert über Farbringe oder SMD-Code ablesen.",achtung:"Belastbarkeit (Watt) nicht überschreiten, sonst Brandgefahr. Bei hohen Strömen 0,5 W / 1 W nehmen.",tags:["keine Polarität","E-Reihen-Werte"]}},
+{n:"Potentiometer",cat:"passiv",catL:"Passiv",fn:"Einstellbarer Widerstand (Drehknopf/Schieber).",app:"Lautstärke, Helligkeit, Sollwert einstellen, Sensor-Abgleich.",det:{kenn:"Endwert in Ω (z. B. 10 kΩ), linear (B) oder logarithmisch (A).",kompat:"3 Anschlüsse: außen die Enden, mitte der Schleifer. Als variabler Spannungsteiler nutzbar.",achtung:"Für Audio log, für lineare Regelung lin. Trimmer = winziges Poti für einmaligen Abgleich.",tags:["lin/log","3 Pins"]}},
+{n:"Keramik-Kondensator",cat:"passiv",catL:"Passiv",fn:"Speichert wenig Ladung, reagiert schnell. Glättet/entstört.",app:"Entkopplung neben ICs (100 nF), Filter, Schwingkreise.",det:{kenn:"Meist pF bis µF. Code wie '104' = 100 nF.",kompat:"Keine Polarität, beliebig herum. Spannungsfestigkeit beachten (z. B. 50 V).",achtung:"Spannungsfestigkeit muss über Betriebsspannung liegen.",tags:["keine Polarität","100 nF Standard"]}},
+{n:"Elektrolyt-Kondensator (Elko)",cat:"passiv",catL:"Passiv",fn:"Speichert viel Ladung. Puffert/glättet Versorgungsspannung.",app:"Glättung am Netzteil/Regler, Energiepuffer, Tiefpassfilter.",det:{kenn:"µF bis mF (z. B. 470 µF / 25 V).",kompat:"GEPOLT! Minus ist am Gehäuse markiert (Strich), kürzeres Beinchen = Minus.",achtung:"Falsch herum oder über Spannung = kann aufblähen/platzen. Spannung mit Reserve wählen.",tags:["GEPOLT","Spannung +Reserve"]}},
+{n:"Folien-Kondensator",cat:"passiv",catL:"Passiv",fn:"Stabiler, langlebiger Kondensator mittlerer Kapazität.",app:"Audio, Filter, Snubber, Netzentstörung.",det:{kenn:"nF bis µF, hohe Spannungsfestigkeit möglich.",kompat:"Keine Polarität. Größer als Keramik, sehr stabil.",achtung:"Teurer/größer, dafür sehr verlässlich und temperaturstabil.",tags:["keine Polarität","sehr stabil"]}},
+{n:"Spule / Induktivität",cat:"passiv",catL:"Passiv",fn:"Wehrt sich gegen Stromänderungen, speichert Energie magnetisch.",app:"Schaltregler (Buck/Boost), Filter, Funk-Schwingkreise.",det:{kenn:"µH bis mH, dazu max. Strom (Sättigungsstrom).",kompat:"Keine Polarität (bei einfachen Drosseln).",achtung:"Max. Strom nicht überschreiten, sonst Sättigung → Wandler bricht ein. Kann Spannungsspitzen erzeugen.",tags:["keine Polarität","max. Strom"]}},
+{n:"Diode (z. B. 1N4007)",cat:"halbleiter",catL:"Halbleiter",fn:"Lässt Strom nur in EINE Richtung durch (Einbahnstraße).",app:"Verpolungsschutz, Gleichrichtung, Freilaufdiode an Spulen/Relais.",det:{kenn:"Sperrspannung (V) und Durchlassstrom (A). 1N4007 = 1000 V / 1 A.",kompat:"GEPOLT! Ring markiert die Kathode (Minus-/Ausgangsseite).",achtung:"Im Durchlass fallen ~0,7 V ab. Sperrspannung des Bauteils nicht überschreiten.",tags:["GEPOLT","Ring = Kathode","~0,7 V Verlust"]}},
+{n:"Schottky-Diode",cat:"halbleiter",catL:"Halbleiter",fn:"Diode mit geringem Spannungsabfall (~0,3 V) und schnell.",app:"Verpolungsschutz, Schaltregler, dort wo wenig Verlust zählt.",det:{kenn:"Niedrige Durchlassspannung, hohe Schaltgeschwindigkeit.",kompat:"GEPOLT, Ring = Kathode, wie normale Diode.",achtung:"Höherer Sperrstrom als Standarddiode, niedrigere Sperrspannung.",tags:["GEPOLT","wenig Verlust","schnell"]}},
+{n:"Zener-Diode",cat:"halbleiter",catL:"Halbleiter",fn:"Begrenzt Spannung auf festen Wert (lässt rückwärts ab Schwelle durch).",app:"Spannungsbegrenzung, Referenzspannung, einfacher Überspannungsschutz.",det:{kenn:"Zener-Spannung (z. B. 5,1 V) und Leistung.",kompat:"GEPOLT, wird in Sperrrichtung betrieben (umgekehrt zur normalen Diode).",achtung:"Braucht meist Vorwiderstand. Nicht für große Ströme/Leistung.",tags:["GEPOLT","feste Spannung"]}},
+{n:"LED",cat:"halbleiter",catL:"Halbleiter",fn:"Leuchtdiode: wandelt Strom in Licht.",app:"Statusanzeige, Beleuchtung, Optokoppler-Eingang.",det:{kenn:"Durchlassspannung je Farbe (rot ~2 V, blau/weiß ~3,2 V), Strom 10–20 mA.",kompat:"GEPOLT! Langes Beinchen = Plus (Anode), abgeflachte Seite = Minus.",achtung:"NIE ohne Vorwiderstand betreiben, sonst sofort durchgebrannt.",tags:["GEPOLT","Vorwiderstand Pflicht","langes Bein = +"]}},
+{n:"Bipolar-Transistor (NPN/PNP)",cat:"halbleiter",catL:"Halbleiter",fn:"Kleiner Steuerstrom schaltet/verstärkt großen Strom.",app:"Schalter für Relais/LED, Signalverstärkung. NPN sehr verbreitet (z. B. BC547, 2N2222).",det:{kenn:"3 Pins: Basis (Steuer), Kollektor, Emitter. Strom-Verstärkung hFE.",kompat:"Basis braucht Vorwiderstand. NPN schaltet gegen Masse, PNP gegen Plus.",achtung:"Pinbelegung je Typ unterschiedlich → Datenblatt. Max. Strom/Spannung beachten.",tags:["3 Pins","Basis-Vorwiderstand","NPN/PNP"]}},
+{n:"MOSFET",cat:"halbleiter",catL:"Halbleiter",fn:"Spannungsgesteuerter Schalter, verlustarm bei hohen Strömen.",app:"Motoren, LED-Streifen, Power-Schalter per Mikrocontroller-Pin.",det:{kenn:"3 Pins: Gate (Steuer), Drain, Source. N-Kanal am häufigsten.",kompat:"Für 3,3/5 V-Steuerung 'Logic-Level'-Typ wählen, sonst schaltet er nicht voll durch.",achtung:"ESD-empfindlich (Gate). Gate-Widerstand + Pull-down empfohlen. Logic-Level beachten.",tags:["Logic-Level wählen","ESD-empfindlich","3 Pins"]}},
+{n:"Optokoppler",cat:"halbleiter",catL:"Halbleiter",fn:"Überträgt Signal per Licht, trennt zwei Stromkreise galvanisch (elektrisch).",app:"Sichere Trennung Mikrocontroller ↔ Netzspannung, Störschutz.",det:{kenn:"LED-Eingang + Foto-Transistor-Ausgang in einem Gehäuse.",kompat:"Eingang wie LED behandeln (Vorwiderstand), Ausgang wie Transistor.",achtung:"Beide Seiten haben getrennte Masse - das ist der Sinn der Trennung.",tags:["galvanische Trennung","LED-Eingang"]}},
+{n:"Linearregler (7805 / LM317 / AMS1117)",cat:"ic",catL:"IC / Aktiv",fn:"Macht aus höherer eine feste niedrigere Spannung (z. B. 5 V, 3,3 V).",app:"Stabile Versorgung für Logik/Mikrocontroller aus Batterie/Netzteil.",det:{kenn:"7805 = fest 5 V, LM317 = einstellbar, AMS1117 = 3,3 V (Low-Drop).",kompat:"Ein-/Ausgangs-Kondensatoren laut Datenblatt (z. B. 10 µF + 100 nF).",achtung:"Verheizt Differenz als Wärme → bei großem Abstand Kühlkörper oder Schaltregler.",tags:["Wärme!","Stütz-Kondensatoren"]}},
+{n:"Schaltregler / DC-DC (Buck/Boost)",cat:"modul",catL:"Modul",fn:"Wandelt Spannung effizient runter (Buck) oder hoch (Boost).",app:"Wirkungsgrad-Versorgung, Akku auf 5 V hoch, 12 V auf 3,3 V runter.",det:{kenn:"Fertig-Modul (z. B. LM2596 buck, MT3608 boost), oft per Poti einstellbar.",kompat:"Eingangsbereich beachten. Ausgang vor Anschluss mit Multimeter einstellen.",achtung:"Wirkungsgrad ~85-95 %, kaum Wärme. Min./Max. Eingangsspannung einhalten.",tags:["effizient","Ausgang vorher einstellen"]}},
+{n:"555 Timer",cat:"ic",catL:"IC / Aktiv",fn:"Erzeugt Zeitverzögerungen oder Rechteck-Schwingungen (Takt).",app:"Blinker, Tongeber, Zeitschalter, PWM-Erzeugung ohne Mikrocontroller.",det:{kenn:"8-Pin-Klassiker. Frequenz über zwei Widerstände + Kondensator (RC).",kompat:"Sehr robust, 4,5-15 V. CMOS-Variante (7555) für niedrige Ströme.",achtung:"Stützkondensator nicht vergessen. Online-RC-Rechner nutzen.",tags:["RC bestimmt Zeit","sehr robust"]}},
+{n:"Logik-IC (74HCxx)",cat:"ic",catL:"IC / Aktiv",fn:"Grundbausteine digitaler Logik: UND, ODER, NICHT, Zähler usw.",app:"Einfache Steuerungen, Signal-Verknüpfung ohne Mikrocontroller.",det:{kenn:"74HC-Reihe = 2-6 V, sehr verbreitet. Pinbelegung je Typ.",kompat:"Logikpegel der Familie beachten. Unbenutzte Eingänge nicht offen lassen.",achtung:"Entkopplungs-Kondensator (100 nF) Pflicht. Offene Eingänge = Fehlverhalten.",tags:["100 nF Pflicht","Pegel beachten"]}},
+{n:"Schieberegister (74HC595)",cat:"ic",catL:"IC / Aktiv",fn:"Macht aus 3 Steuerleitungen 8 Ausgänge (erweitert Pins).",app:"Viele LEDs/7-Segment-Anzeigen mit wenig Mikrocontroller-Pins ansteuern.",det:{kenn:"Seriell rein, parallel raus. Kaskadierbar (mehrere hintereinander).",kompat:"Arbeitet mit 3,3/5 V Logik. Pro Ausgang LED-Vorwiderstand.",achtung:"Gesamtstrom des Chips begrenzt → nicht alle LEDs auf Vollstrom.",tags:["Pin-Sparer","kaskadierbar"]}},
+{n:"Mikrocontroller (Arduino / ESP32 / RP2040)",cat:"ic",catL:"IC / Aktiv",fn:"Programmierbarer Mini-Computer: liest Sensoren, steuert Ausgänge.",app:"Herzstück fast jedes Hobby-Projekts. ESP32 mit WLAN/Bluetooth.",det:{kenn:"Arduino Uno = 5 V (einsteigerfreundlich). ESP32/RP2040 = 3,3 V, mehr Leistung.",kompat:"PIN-Spannung beachten! ESP32-Pins sind 3,3 V, NICHT 5 V-fest.",achtung:"Pin-Strom begrenzt (~20-40 mA) → Lasten über Transistor/MOSFET schalten.",tags:["3,3 V oder 5 V?","Pin-Strom begrenzt"]}},
+{n:"Relais",cat:"mech",catL:"Elektromech.",fn:"Elektrisch gesteuerter mechanischer Schalter (klickt).",app:"Hohe Lasten / Netzspannung mit kleinem Signal schalten, Trennung.",det:{kenn:"Spulenspannung (5 V/12 V) + Schaltkontakt-Belastbarkeit (z. B. 10 A 250 V).",kompat:"Über Transistor/MOSFET ansteuern, NIE direkt am Mikrocontroller-Pin.",achtung:"Freilaufdiode über die Spule Pflicht! Modul-Relais haben das oft schon drauf.",tags:["Freilaufdiode!","über Transistor"]}},
+{n:"Taster / Schalter",cat:"mech",catL:"Elektromech.",fn:"Schließt/öffnet Kontakt. Taster = nur solange gedrückt.",app:"Eingaben, Reset, Modus wählen.",det:{kenn:"Taster (Momentary) oder Schalter (rastend). Strombelastbarkeit beachten.",kompat:"Braucht Pull-up oder Pull-down, damit der Eingang definiert ist.",achtung:"'Prellen': mechanischer Kontakt flattert kurz → entprellen (Kondensator oder Software).",tags:["Pull-up/down nötig","Prellen"]}},
+{n:"Quarz / Oszillator",cat:"passiv",catL:"Passiv",fn:"Gibt einen sehr genauen Takt vor (Schwingung).",app:"Taktquelle für Mikrocontroller, Uhren, präzise Zeitmessung.",det:{kenn:"Frequenz (z. B. 16 MHz, 8 MHz, 32,768 kHz für Uhren).",kompat:"Quarz braucht zwei kleine Kondensatoren (Lastkapazität laut Datenblatt).",achtung:"Oszillator-Modul ist aktiv (3 Pins, braucht Strom), Quarz passiv (2 Pins).",tags:["genauer Takt","Lastkondensatoren"]}},
+{n:"Sicherung",cat:"schutz",catL:"Schutz",fn:"Unterbricht den Stromkreis bei zu hohem Strom (schmilzt durch).",app:"Schutz vor Überstrom/Kurzschluss, Brandschutz.",det:{kenn:"Nennstrom (A) und Charakteristik (flink/träge). Auch rückstellbar (PTC/Polyfuse).",kompat:"In die Plus-Leitung, vor die zu schützende Schaltung.",achtung:"Nennstrom knapp über Normalbetrieb wählen. Nie überbrücken.",tags:["flink/träge","in Plus-Leitung"]}},
+{n:"Sensor-Modul (allgemein)",cat:"modul",catL:"Modul",fn:"Fertige Platine, die eine Größe misst (Temp, Licht, Abstand, Bewegung).",app:"Eingangsdaten für Projekte: DHT22 (Temp/Feuchte), HC-SR04 (Abstand), PIR (Bewegung).",det:{kenn:"Schnittstelle: analog (Spannung), digital (an/aus), I²C oder SPI (Bus).",kompat:"Betriebsspannung prüfen (3,3 V vs 5 V) und Logikpegel zum Mikrocontroller.",achtung:"Bei 5 V-Sensor an 3,3 V-Controller (ESP32) Pegel anpassen.",tags:["3,3 V / 5 V prüfen","I²C / SPI / analog"]}},
+{n:"Li-Ion / LiPo Akku",cat:"power",catL:"Stromquelle",fn:"Wiederaufladbarer Energiespeicher, hohe Energiedichte.",app:"Mobile Projekte, Wearables, alles ohne Steckdose.",det:{kenn:"Eine Zelle: 3,7 V nominal, 4,2 V voll, ~3,0 V leer. Kapazität in mAh.",kompat:"Laden NUR mit passendem Laderegler (z. B. TP4056 für 1 Zelle).",achtung:"Tiefentladung & Überladung gefährlich. Schutzschaltung (BMS) verwenden. Nicht beschädigen.",tags:["BMS/Schutz!","3,0-4,2 V","Spezial-Lader"]}},
+];
+const CDESC={
+"Widerstand":"Eine Engstelle für den Strom. Je größer der Wert, desto weniger Strom kommt bei gleicher Spannung durch. Das einfachste und häufigste Bauteil überhaupt.",
+"Potentiometer":"Ein Widerstand mit Drehknopf: durch Drehen änderst du den Wert stufenlos, wie bei einem Lautstärke- oder Dimmer-Regler.",
+"Keramik-Kondensator":"Ein winziger, blitzschneller Ladungsspeicher. Sitzt neben fast jedem Chip und bügelt kurze Spannungsstörungen glatt.",
+"Elektrolyt-Kondensator (Elko)":"Ein größerer Ladungsspeicher als Puffer: fängt Spannungsschwankungen ab wie ein Wassertank den Druck. Muss richtig herum eingebaut werden.",
+"Folien-Kondensator":"Ein besonders stabiler, langlebiger Ladungsspeicher mittlerer Größe. Beliebt in Audio und Filtern, wo es auf Genauigkeit ankommt.",
+"Spule / Induktivität":"Ein aufgewickelter Draht, der sich gegen schnelle Stromänderungen wehrt und Energie magnetisch zwischenspeichert. Das Gegenstück zum Kondensator.",
+"Diode (z. B. 1N4007)":"Ein Einbahnschild für Strom: lässt ihn nur in eine Richtung durch. Schützt zum Beispiel davor, dass Strom falsch herum fließt.",
+"Schottky-Diode":"Eine Diode mit fast keinem Spannungsverlust, die zudem sehr schnell schaltet. Überall dort, wo wenig verschenkt werden darf.",
+"Zener-Diode":"Eine Diode, die ab einer festen Spannung die Tür öffnet und so eine Spannung auf einen genauen Wert begrenzt.",
+"LED":"Eine Diode, die leuchtet, sobald Strom durchfließt. Braucht immer einen Vorwiderstand, sonst brennt sie durch.",
+"Bipolar-Transistor (NPN/PNP)":"Ein winziger Schalter, bei dem ein kleiner Strom einen großen Strom steuert. Klassiker für Signalverstärkung und einfache Schaltstufen.",
+"MOSFET":"Ein elektronischer Schalter, den eine Spannung steuert. Schaltet kräftige Lasten wie Motoren oder LED-Streifen fast ohne eigene Wärme, ideal am Mikrocontroller-Pin.",
+"Optokoppler":"Überträgt ein Signal per kleinem Lichtblitz im Inneren und trennt dadurch zwei Stromkreise komplett. Schützt empfindliche Elektronik vor der gefährlichen Seite.",
+"Linearregler (7805 / LM317 / AMS1117)":"Macht aus einer höheren eine feste, saubere Spannung. Einfach und ruhig, verheizt den Überschuss aber als Wärme.",
+"Schaltregler / DC-DC (Buck/Boost)":"Wandelt Spannung sehr effizient herauf oder herunter, fast ohne Wärme. Die sparsame Wahl bei großem Spannungsabstand.",
+"555 Timer":"Ein kleiner Taktgeber-Klassiker: erzeugt Blinken, Töne oder Zeitverzögerungen ganz ohne Mikrocontroller.",
+"Logik-IC (74HCxx)":"Bausteine der digitalen Logik: verknüpfen Ein/Aus-Signale mit UND, ODER und NICHT. Quasi die Grundrechenarten der Elektronik.",
+"Schieberegister (74HC595)":"Ein Pin-Vermehrer: macht aus 3 Steuerleitungen 8 Ausgänge. Praktisch, wenn dem Mikrocontroller die Anschlüsse ausgehen.",
+"Mikrocontroller (Arduino / ESP32 / RP2040)":"Ein Mini-Computer auf einem Chip, der dein Programm ausführt: liest Sensoren, entscheidet, steuert. Das Gehirn der meisten Projekte.",
+"Relais":"Ein elektrisch gesteuerter mechanischer Schalter, der hörbar klickt. Schaltet große oder gefährliche Lasten mit einem kleinen Signal.",
+"Taster / Schalter":"Stellt eine Verbindung her oder unterbricht sie. Der Taster nur solange gedrückt, der Schalter bleibt in seiner Stellung.",
+"Quarz / Oszillator":"Ein winziger Taktgeber, der sehr genau schwingt. Liefert den präzisen Herzschlag für Mikrocontroller und Uhren.",
+"Sicherung":"Eine Sollbruchstelle: schmilzt bei zu viel Strom durch und unterbricht den Kreis, bevor etwas durchbrennt oder Feuer fängt.",
+"Sensor-Modul (allgemein)":"Eine fertige kleine Platine, die etwas misst, etwa Temperatur, Licht, Abstand oder Bewegung, und das Ergebnis an den Mikrocontroller meldet.",
+"Li-Ion / LiPo Akku":"Ein wiederaufladbarer Energiespeicher mit viel Energie auf wenig Raum. Kräftig, aber empfindlich: braucht eine Schutzschaltung und sorgsamen Umgang.",
+};
+const ccats=[{k:"all",l:"Alle"},{k:"passiv",l:"Passiv"},{k:"halbleiter",l:"Halbleiter"},{k:"ic",l:"IC / Aktiv"},{k:"mech",l:"Elektromech."},{k:"power",l:"Stromquelle"},{k:"schutz",l:"Schutz"},{k:"modul",l:"Modul"}];
+let activeCat="all",sortCol="n",sortDir=1,expanded=null;
+const ccols=[{k:"n",l:"Bauteil"},{k:"catL",l:"Kategorie"},{k:"fn",l:"Was es macht"},{k:"app",l:"Wo eingesetzt"}];
+function renderC(){
+const q=document.getElementById("q").value.toLowerCase();
+let data=C.filter(f=>(activeCat==="all"||f.cat===activeCat)&&(!q||f.n.toLowerCase().includes(q)||f.fn.toLowerCase().includes(q)||f.app.toLowerCase().includes(q)));
+data.sort((a,b)=>{let av=a[sortCol],bv=b[sortCol];return sortDir*String(av).localeCompare(String(bv))});
+document.getElementById("count").textContent=data.length+" Bauteile";
+let th="<tr>"+ccols.map(c=>`<th onclick="doSortC('${c.k}')">${c.l}<span class="ar">${sortCol===c.k?(sortDir===1?"\u25b2":"\u25bc"):""}</span></th>`).join("")+"</tr>";
+document.getElementById("thead").innerHTML=th;
+let tb="";
+data.forEach(f=>{
+tb+=`<tr class="cat-${f.cat}" style="cursor:pointer" onclick="toggleC('${f.n.replace(/'/g,"\\'")}')">`;
+ccols.forEach(c=>{
+if(c.k==="catL"){tb+=`<td><span class="cb">${f.catL}</span></td>`}
+else if(c.k==="n"){tb+=`<td><b>${f.n}</b></td>`}
+else{tb+=`<td>${f[c.k]}</td>`}
+});
+tb+="</tr>";
+if(expanded===f.n){
+const d=f.det;
+tb+=`<tr class="dr"><td colspan="${ccols.length}">
+${CDESC[f.n]?`<div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid rgba(127,127,127,.25)"><b>Einfach erklärt:</b> ${CDESC[f.n]}</div>`:""}
+<b>Kennwerte:</b> ${d.kenn}<br>
+<b>Kompatibilität:</b> ${d.kompat}<br>
+<b>Worauf achten:</b> ${d.achtung}
+<div class="tags">${d.tags.map(t=>`<span class="tag${/GEPOLT|Pflicht|!|ESD/.test(t)?' warn':''}">${t}</span>`).join("")}</div>
+</td></tr>`;
+}
+});
+document.getElementById("tbody").innerHTML=tb;
+}
+window.doSortC=function(k){if(sortCol===k)sortDir*=-1;else{sortCol=k;sortDir=1}renderC()};
+window.toggleC=function(n){expanded=expanded===n?null:n;renderC()};
+const cDiv=document.getElementById("cats");
+ccats.forEach(c=>{const b=document.createElement("button");b.textContent=c.l;b.className=c.k==="all"?"active":"";b.onclick=()=>{activeCat=c.k;cDiv.querySelectorAll("button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderC()};cDiv.appendChild(b)});
+document.getElementById("q").addEventListener("input",renderC);
+renderC();
+
+/* ---------- RECHNER: LED ---------- */
+function calcLED(){
+const vs=parseFloat(document.getElementById("led-vs").value);
+const vf=parseFloat(document.getElementById("led-vf").value);
+const i=parseFloat(document.getElementById("led-i").value)/1000;
+const out=document.getElementById("led-out");const note=document.getElementById("led-note");
+if(isNaN(vs)||isNaN(vf)||isNaN(i)||i<=0){out.textContent="—";return}
+if(vf>=vs){out.textContent="Versorgung muss höher als LED-Spannung sein";note.textContent="";return}
+const r=(vs-vf)/i;
+const pw=(vs-vf)*i;
+// nächster E12-Wert
+const e12=[10,12,15,18,22,27,33,39,47,56,68,82];
+let best=r,bd=1e9;
+for(let dec=0;dec<6;dec++){for(const e of e12){const v=e*Math.pow(10,dec);if(Math.abs(v-r)<bd){bd=Math.abs(v-r);best=v}}}
+out.textContent=`R ≈ ${r.toFixed(0)} Ω  →  Normwert ${best} Ω`;
+note.textContent=`Verlustleistung am Widerstand: ${(pw*1000).toFixed(0)} mW → ein 1/4-W-Widerstand (250 mW) reicht ${pw*1000<200?'locker':'knapp, ggf. 1/2 W nehmen'}.`;
+}
+["led-vs","led-vf","led-i"].forEach(id=>document.getElementById(id).addEventListener("input",calcLED));
+calcLED();
+
+/* ---------- RECHNER: OHM ---------- */
+window.calcOhm=function(){
+const u=parseFloat(document.getElementById("ohm-u").value);
+const i=parseFloat(document.getElementById("ohm-i").value);
+const r=parseFloat(document.getElementById("ohm-r").value);
+const out=document.getElementById("ohm-out");
+const has=[!isNaN(u),!isNaN(i),!isNaN(r)].filter(Boolean).length;
+if(has<2){out.textContent="Bitte zwei Werte eingeben";return}
+let U=u,I=i,R=r;
+if(isNaN(u))U=I*R;
+else if(isNaN(i))I=U/R;
+else if(isNaN(r))R=U/I;
+const P=U*I;
+out.innerHTML=`U = ${U.toFixed(3)} V &nbsp;·&nbsp; I = ${I.toFixed(4)} A (${(I*1000).toFixed(1)} mA) &nbsp;·&nbsp; R = ${R.toFixed(1)} Ω &nbsp;·&nbsp; P = ${P.toFixed(3)} W`;
+};
+
+/* ---------- RECHNER: FARBCODE ---------- */
+const colors=[
+{n:"Schwarz",v:0,hex:"#000000",mult:1,tol:null},
+{n:"Braun",v:1,hex:"#5a3210",mult:10,tol:"±1%"},
+{n:"Rot",v:2,hex:"#c0392b",mult:100,tol:"±2%"},
+{n:"Orange",v:3,hex:"#e67e22",mult:1000,tol:null},
+{n:"Gelb",v:4,hex:"#f1c40f",mult:10000,tol:null},
+{n:"Grün",v:5,hex:"#27ae60",mult:100000,tol:"±0,5%"},
+{n:"Blau",v:6,hex:"#2980b9",mult:1000000,tol:"±0,25%"},
+{n:"Violett",v:7,hex:"#8e44ad",mult:10000000,tol:null},
+{n:"Grau",v:8,hex:"#7f8c8d",mult:null,tol:null},
+{n:"Weiß",v:9,hex:"#ecf0f1",mult:null,tol:null},
+{n:"Gold",v:null,hex:"#c9a227",mult:0.1,tol:"±5%"},
+{n:"Silber",v:null,hex:"#bdc3c7",mult:0.01,tol:"±10%"},
+];
+function fillSel(id,type){
+const s=document.getElementById(id);s.innerHTML="";
+colors.forEach((c,idx)=>{
+if(type==="digit"&&c.v===null)return;
+if(type==="mult"&&c.mult===null)return;
+if(type==="tol"&&c.tol===null)return;
+const o=document.createElement("option");o.value=idx;o.textContent=c.n;s.appendChild(o);
+});
+}
+fillSel("b1","digit");fillSel("b2","digit");fillSel("b3","mult");fillSel("b4","tol");
+document.getElementById("b1").value=1;document.getElementById("b2").value=0;document.getElementById("b3").value=2;document.getElementById("b4").value=10;
+function calcBand(){
+const c1=colors[document.getElementById("b1").value];
+const c2=colors[document.getElementById("b2").value];
+const c3=colors[document.getElementById("b3").value];
+const c4=colors[document.getElementById("b4").value];
+document.getElementById("cb1").style.background=c1.hex;
+document.getElementById("cb2").style.background=c2.hex;
+document.getElementById("cb3").style.background=c3.hex;
+document.getElementById("cb4").style.background=c4.hex;
+let val=(c1.v*10+c2.v)*c3.mult;
+let disp;
+if(val>=1e6)disp=(val/1e6)+" MΩ";
+else if(val>=1e3)disp=(val/1e3)+" kΩ";
+else disp=val+" Ω";
+document.getElementById("band-out").textContent=`${disp}  ${c4.tol}`;
+}
+["b1","b2","b3","b4"].forEach(id=>document.getElementById(id).addEventListener("change",calcBand));
+calcBand();
+
+/* ---------- RECHNER: SPANNUNGSTEILER ---------- */
+function calcVT(){
+const vin=parseFloat(document.getElementById("vt-in").value);
+const r1=parseFloat(document.getElementById("vt-r1").value);
+const r2=parseFloat(document.getElementById("vt-r2").value);
+const out=document.getElementById("vt-out");
+if(isNaN(vin)||isNaN(r1)||isNaN(r2)||(r1+r2)<=0){out.textContent="—";return}
+const vout=vin*r2/(r1+r2);
+out.textContent=`Ausgang ≈ ${vout.toFixed(3)} V`;
+}
+["vt-in","vt-r1","vt-r2"].forEach(id=>document.getElementById(id).addEventListener("input",calcVT));
+calcVT();
+
+/* ---------- VERGLEICHSMATRIZEN ---------- */
+function rateColor(v){if(v<=3)return"#D64B3C";if(v<=6)return"#E59A3C";return"#3DA66E";}
+function renderRating(containerId,headers,rows){
+let h="<div class='tbl-wrap'><table style='min-width:700px'><thead><tr>";
+headers.forEach((hd,i)=>h+=`<th style='${i===0?"":"min-width:88px"}'>${hd}</th>`);
+h+="</tr></thead><tbody>";
+rows.forEach(r=>{
+h+=`<tr><td><b>${r.name}</b></td>`;
+r.vals.forEach(v=>{
+h+=`<td><div class='rate'><div class='rate-bar'><div class='rate-fill' style='width:${v*10}%;background:${rateColor(v)}'></div></div><span class='rate-num'>${v}</span></div></td>`;
+});
+h+="</tr>";
+});
+h+="</tbody></table></div>";
+document.getElementById(containerId).innerHTML=h;
+}
+renderRating("motor-rating",
+["Typ","Präzision","Kraft","Tempo","Einfachheit","Langlebig","Günstig"],
+[
+{name:"Gleichstrommotor",vals:[2,4,8,9,5,9]},
+{name:"Getriebemotor",vals:[3,9,3,9,6,7]},
+{name:"Servo",vals:[7,6,5,8,6,7]},
+{name:"Schrittmotor",vals:[10,7,5,5,9,6]},
+{name:"BLDC",vals:[5,8,10,3,10,4]},
+]);
+renderRating("display-rating",
+["Typ","Schärfe","Farbe","Sparsam","Tempo","Sonnenlicht","Günstig"],
+[
+{name:"OLED",vals:[9,2,8,8,5,8]},
+{name:"TFT",vals:[7,9,4,8,4,8]},
+{name:"IPS",vals:[8,10,4,8,5,6]},
+{name:"E-Paper",vals:[7,2,10,1,10,4]},
+{name:"Zeichen-LCD",vals:[3,1,6,6,6,9]},
+]);
+renderRating("mcu-rating",
+["Board","Leistung","Funk","Einsteiger","Community","Sparsam","Günstig"],
+[
+{name:"Arduino Uno/Nano",vals:[3,1,10,10,4,7]},
+{name:"ESP32",vals:[8,10,7,9,6,8]},
+{name:"ESP8266",vals:[5,6,6,7,5,9]},
+{name:"Pico 2 (W)",vals:[7,4,8,7,8,9]},
+{name:"STM32",vals:[9,1,3,6,7,6]},
+]);
+</script>
+</body>
+</html>
